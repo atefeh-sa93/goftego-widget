@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    // ES2021 matches Lit 3's own target (ADR 0005)
+    "target": "ES2021",
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    // Standard TC39 decorators, not experimentalDecorators (ADR 0004)
+    "experimentalDecorators": false,
+    "useDefineForClassFields": false,
+    "declaration": true,
+    "types": ["vite/client"]
+  },
+  "include": ["src", "demos", "tests"]
+}

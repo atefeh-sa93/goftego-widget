@@ -81,9 +81,7 @@
     {
       "n": 1,
       "m": "M0",
-      "labels": [
-        "setup"
-      ],
+      "labels": ["setup"],
       "title": "Spike: Lit tutorial and a tiny custom element",
       "fa": "یک ساعت آموزش رسمی Lit؛ یک element کوچک با یک attribute و یک رویداد؛ بررسی shadow root در DevTools",
       "tasks": [
@@ -96,9 +94,7 @@
     {
       "n": 2,
       "m": "M0",
-      "labels": [
-        "setup"
-      ],
+      "labels": ["setup"],
       "title": "Scaffold repo: Vite library mode, Lit 3, TypeScript strict, ESLint",
       "fa": "ساخت ریپو با pnpm، Vite library mode، Lit 3، TS strict، ESLint و Prettier و ساختار پوشه‌ها",
       "tasks": [
@@ -113,10 +109,7 @@
     {
       "n": 3,
       "m": "M0",
-      "labels": [
-        "setup",
-        "test"
-      ],
+      "labels": ["setup", "test"],
       "title": "Test tooling: Vitest browser mode and Playwright on 3 engines",
       "fa": "راه‌اندازی Vitest در browser mode و Playwright با Chromium، Firefox و WebKit",
       "tasks": [
@@ -129,9 +122,7 @@
     {
       "n": 4,
       "m": "M0",
-      "labels": [
-        "ci"
-      ],
+      "labels": ["ci"],
       "title": "CI workflow and size-limit budget",
       "fa": "فایل ci.yml (lint، typecheck، تست، build، size، e2e) و بودجه حجم: loader زیر ۵KB و کل زیر ۲۵KB",
       "tasks": [
@@ -145,9 +136,7 @@
     {
       "n": 5,
       "m": "M0",
-      "labels": [
-        "docs"
-      ],
+      "labels": ["docs"],
       "title": "Write the public API contract in README first",
       "fa": "اول جدول API (attributeها، property، متدها، رویدادها، متغیرهای CSS، partها) در README، بعد کد",
       "tasks": [
@@ -162,9 +151,7 @@
     {
       "n": 6,
       "m": "M1",
-      "labels": [
-        "feature"
-      ],
+      "labels": ["feature"],
       "title": "GoftegoChat element: attributes and properties",
       "fa": "کلاس GoftegoChat با همه attributeها، property مربوط به headers و همگام بودن open در هر دو جهت",
       "tasks": [
@@ -177,9 +164,7 @@
     {
       "n": 7,
       "m": "M1",
-      "labels": [
-        "feature"
-      ],
+      "labels": ["feature"],
       "title": "Public methods and typed gc-* events",
       "fa": "متدهای open/close/send و رویدادهای تایپ‌شده gc-* با bubbles و composed",
       "tasks": [
@@ -193,9 +178,7 @@
     {
       "n": 8,
       "m": "M1",
-      "labels": [
-        "feature"
-      ],
+      "labels": ["feature"],
       "title": "Launcher button and theming with --gc-* and ::part",
       "fa": "دکمه launcher، توکن‌های تم روی :host با all: initial، و part برای سفارشی‌سازی",
       "tasks": [
@@ -208,9 +191,7 @@
     {
       "n": 9,
       "m": "M1",
-      "labels": [
-        "feature"
-      ],
+      "labels": ["feature"],
       "title": "i18n and RTL: lang, dir, built-in fa/en strings, strings property",
       "fa": "چندزبانگی: متن‌های داخلی فارسی و انگلیسی با lang، جهت خودکار از روی زبان، property به اسم strings برای زبان‌های دیگر، و position منطقی که در RTL جابه‌جا شود",
       "tasks": [
@@ -225,9 +206,7 @@
     {
       "n": 10,
       "m": "M1",
-      "labels": [
-        "feature"
-      ],
+      "labels": ["feature"],
       "title": "loader.ts and safe custom element registration",
       "fa": "فایل loader و ثبت امن: اگر اسکریپت دو بار در صفحه بود، دوباره ثبت نشود",
       "tasks": [
@@ -240,10 +219,7 @@
     {
       "n": 11,
       "m": "M1",
-      "labels": [
-        "demo",
-        "ci"
-      ],
+      "labels": ["demo", "ci"],
       "title": "demos/plain page and first green CI",
       "fa": "صفحه دموی HTML خالی و اولین CI سبز",
       "tasks": [
@@ -255,9 +231,7 @@
     {
       "n": 12,
       "m": "M2",
-      "labels": [
-        "feature"
-      ],
+      "labels": ["feature"],
       "title": "Lazy-load the chat panel on first open",
       "fa": "بارگذاری پنل با import پویا فقط در اولین باز شدن؛ بررسی در تب Network",
       "tasks": [
@@ -270,9 +244,7 @@
     {
       "n": 13,
       "m": "M2",
-      "labels": [
-        "feature"
-      ],
+      "labels": ["feature"],
       "title": "Port sse.ts from Goftego and add mock mode",
       "fa": "انتقال منطق SSE از Goftego و حالت mock با جواب‌های ضبط‌شده برای دموی بدون سرور",
       "tasks": [
@@ -285,9 +257,7 @@
     {
       "n": 14,
       "m": "M2",
-      "labels": [
-        "feature"
-      ],
+      "labels": ["feature"],
       "title": "Chat panel: message list, composer, Stop, Retry, errors",
       "fa": "ChatPanel، MessageList و Composer؛ stream جواب، دکمه Stop، Retry و حالت‌های خطا",
       "tasks": [
@@ -301,10 +271,7 @@
     {
       "n": 15,
       "m": "M2",
-      "labels": [
-        "feature",
-        "security"
-      ],
+      "labels": ["feature", "security"],
       "title": "Small, safe markdown renderer with XSS tests first",
       "fa": "رندرر markdown کوچک (bold، code، لیست، لینک) بدون innerHTML؛ تست‌های XSS اول نوشته شوند",
       "tasks": [
@@ -317,9 +284,7 @@
     {
       "n": 16,
       "m": "M2",
-      "labels": [
-        "a11y"
-      ],
+      "labels": ["a11y"],
       "title": "Accessibility: dialog, focus trap, Esc, focus return, aria-live",
       "fa": "دسترس‌پذیری: role=dialog، focus trap، بستن با Esc، برگشت فوکوس به launcher، aria-live برای جواب",
       "tasks": [
@@ -333,10 +298,7 @@
     {
       "n": 17,
       "m": "M3",
-      "labels": [
-        "demo",
-        "feature"
-      ],
+      "labels": ["demo", "feature"],
       "title": "React 19 demo and JSX types",
       "fa": "دموی React 19 با Vite و تایپ‌های JSX برای استفاده تایپ‌شده در React",
       "tasks": [
@@ -348,11 +310,7 @@
     {
       "n": 18,
       "m": "M3",
-      "labels": [
-        "demo",
-        "feature",
-        "cuttable"
-      ],
+      "labels": ["demo", "feature", "cuttable"],
       "title": "Vue 3 demo and Vue types",
       "fa": "دموی Vue 3 و تایپ برای Vue (اگر عقب افتادی، به ۱.۱ منتقل می‌شود)",
       "tasks": [
@@ -364,9 +322,7 @@
     {
       "n": 19,
       "m": "M3",
-      "labels": [
-        "demo"
-      ],
+      "labels": ["demo"],
       "title": "Hostile CSS demo page",
       "fa": "صفحه hostile با CSS سراسری تهاجمی تا ثابت شود ویجت خراب نمی‌شود",
       "tasks": [
@@ -377,11 +333,7 @@
     {
       "n": 20,
       "m": "M3",
-      "labels": [
-        "demo",
-        "security",
-        "cuttable"
-      ],
+      "labels": ["demo", "security", "cuttable"],
       "title": "Strict CSP demo page",
       "fa": "صفحه با CSP سخت‌گیرانه بدون unsafe-inline (اگر عقب افتادی، به ۱.۱ منتقل می‌شود)",
       "tasks": [
@@ -392,9 +344,7 @@
     {
       "n": 21,
       "m": "M3",
-      "labels": [
-        "test"
-      ],
+      "labels": ["test"],
       "title": "Complete unit test suite",
       "fa": "تکمیل تست‌های واحد: همگامی attribute/property، رویدادها، ثبت دوباره، markdown، focus trap",
       "tasks": [
@@ -408,9 +358,7 @@
     {
       "n": 22,
       "m": "M3",
-      "labels": [
-        "test"
-      ],
+      "labels": ["test"],
       "title": "Playwright E2E across all demos on 3 engines",
       "fa": "تست E2E روی همه دموها و هر سه موتور: stream، lazy، hostile، تم، CSP، RTL، axe",
       "tasks": [
@@ -426,9 +374,7 @@
     {
       "n": 23,
       "m": "M3",
-      "labels": [
-        "release"
-      ],
+      "labels": ["release"],
       "title": "Release 1.0.0 to npm with Changesets",
       "fa": "انتشار نسخه 1.0.0 روی npm با Changesets؛ CDN از طریق jsDelivr خودکار",
       "tasks": [
@@ -441,10 +387,7 @@
     {
       "n": 24,
       "m": "M3",
-      "labels": [
-        "ci",
-        "demo"
-      ],
+      "labels": ["ci", "demo"],
       "title": "Deploy demos to GitHub Pages",
       "fa": "workflow جدا برای انتشار دموها روی GitHub Pages",
       "tasks": [
@@ -456,9 +399,7 @@
     {
       "n": 25,
       "m": "M3",
-      "labels": [
-        "docs"
-      ],
+      "labels": ["docs"],
       "title": "Final README",
       "fa": "README کامل: badgeها، GIF، Quick start، API reference، پروتکل، تصمیم‌های فنی، محدودیت‌ها، نسخه‌گذاری",
       "tasks": [
@@ -475,9 +416,7 @@
     {
       "n": 26,
       "m": "M3",
-      "labels": [
-        "docs"
-      ],
+      "labels": ["docs"],
       "title": "Repo settings: description, topics, social preview, pin",
       "fa": "تنظیمات ریپو: توضیح یک‌خطی، topicها، تصویر social preview و pin در پروفایل",
       "tasks": [
@@ -490,9 +429,7 @@
     {
       "n": 27,
       "m": "BL",
-      "labels": [
-        "roadmap"
-      ],
+      "labels": ["roadmap"],
       "title": "Embed the widget on the portfolio site",
       "fa": "قرار دادن ویجت در سایت پورتفولیو تا بازدیدکننده‌ها درباره پروژه‌ها سؤال بپرسند",
       "tasks": [
@@ -503,38 +440,26 @@
     {
       "n": 28,
       "m": "BL",
-      "labels": [
-        "roadmap"
-      ],
+      "labels": ["roadmap"],
       "title": "v1.1: inline mode (in-page, not floating)",
       "fa": "نسخه ۱.۱: حالت inline داخل صفحه",
-      "tasks": [
-        "Design the attribute (e.g. mode=\"inline\") as a minor, non-breaking addition"
-      ]
+      "tasks": ["Design the attribute (e.g. mode=\"inline\") as a minor, non-breaking addition"]
     },
     {
       "n": 29,
       "m": "BL",
-      "labels": [
-        "roadmap"
-      ],
+      "labels": ["roadmap"],
       "title": "v1.1: persist conversation in sessionStorage",
       "fa": "نسخه ۱.۱: ذخیره گفتگو در sessionStorage",
-      "tasks": [
-        "Opt-in attribute, keyed per endpoint"
-      ]
+      "tasks": ["Opt-in attribute, keyed per endpoint"]
     },
     {
       "n": 30,
       "m": "BL",
-      "labels": [
-        "roadmap"
-      ],
+      "labels": ["roadmap"],
       "title": "v1.2: Declarative Shadow DOM for SSR",
       "fa": "نسخه ۱.۲: Declarative Shadow DOM برای SSR",
-      "tasks": [
-        "Render the launcher without JavaScript"
-      ]
+      "tasks": ["Render the launcher without JavaScript"]
     }
   ]
 }

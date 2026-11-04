@@ -13,11 +13,11 @@ code or lost in chat history.
 
 ## Options considered
 
-| Option | Pros | Cons |
-| ------ | ---- | ---- |
-| ADR file per decision + PR section + README log | Permanent, reviewable, linkable from README and PRs | A bit more writing per task |
-| PR description + README only | Lighter | Reasoning is scattered across closed PRs |
-| Issue comments + README | Decided before code is written | Hard to find later, not versioned with the code |
+| Option                                          | Pros                                                | Cons                                            |
+| ----------------------------------------------- | --------------------------------------------------- | ----------------------------------------------- |
+| ADR file per decision + PR section + README log | Permanent, reviewable, linkable from README and PRs | A bit more writing per task                     |
+| PR description + README only                    | Lighter                                             | Reasoning is scattered across closed PRs        |
+| Issue comments + README                         | Decided before code is written                      | Hard to find later, not versioned with the code |
 
 ## Decision
 

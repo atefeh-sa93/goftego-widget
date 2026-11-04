@@ -13,13 +13,13 @@ extra feature work the design pulls in.
 
 ## Options considered
 
-| Option | Pros | Cons |
-| ------ | ---- | ---- |
-| A · Classic: accent header, message bubbles, round launcher | Familiar to users, built entirely with the planned 1.0 API | Less distinctive |
-| B · Minimal: hairline header, bubble-less replies, text pill launcher | Calm, typographic | Text launcher takes more space; strings need i18n |
-| C · Welcome card: start screen with suggestions | Friendly, guides first question | Needs a new `suggestions` API and a start screen (~½ day) |
-| D · Side sheet: full-height panel from the edge | Room for long answers | Needs a new layout mode and more tests; fits 1.1 |
-| E · Dark compact | Shows theming power | Same structure as A, only colours differ |
+| Option                                                                | Pros                                                       | Cons                                                      |
+| --------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------- |
+| A · Classic: accent header, message bubbles, round launcher           | Familiar to users, built entirely with the planned 1.0 API | Less distinctive                                          |
+| B · Minimal: hairline header, bubble-less replies, text pill launcher | Calm, typographic                                          | Text launcher takes more space; strings need i18n         |
+| C · Welcome card: start screen with suggestions                       | Friendly, guides first question                            | Needs a new `suggestions` API and a start screen (~½ day) |
+| D · Side sheet: full-height panel from the edge                       | Room for long answers                                      | Needs a new layout mode and more tests; fits 1.1          |
+| E · Dark compact                                                      | Shows theming power                                        | Same structure as A, only colours differ                  |
 
 ## Decision
 

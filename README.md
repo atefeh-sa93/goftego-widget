@@ -24,10 +24,38 @@ Every decision in this project is made explicitly and recorded as an
 [Architecture Decision Record](docs/decisions/). Each pull request lists the
 decisions it implements.
 
-| # | Decision | Choice | Status |
-| - | -------- | ------ | ------ |
-| [0001](docs/decisions/0001-record-decisions-as-adrs.md) | How decisions are recorded | ADR + PR section + this table | Accepted |
-| [0002](docs/decisions/0002-design-direction-classic.md) | Visual design direction | A · Classic panel | Accepted |
+| #                                                       | Decision                   | Choice                                              | Status   |
+| ------------------------------------------------------- | -------------------------- | --------------------------------------------------- | -------- |
+| [0001](docs/decisions/0001-record-decisions-as-adrs.md) | How decisions are recorded | ADR + PR section + this table                       | Accepted |
+| [0002](docs/decisions/0002-design-direction-classic.md) | Visual design direction    | A · Classic panel                                   | Accepted |
+| [0003](docs/decisions/0003-eslint-and-prettier.md)      | Lint and format tooling    | ESLint + Prettier, with Lit and web-component rules | Accepted |
+| [0004](docs/decisions/0004-standard-decorators.md)      | Decorator style in Lit     | Standard TC39 decorators with `accessor`            | Accepted |
+| [0005](docs/decisions/0005-browser-target-es2021.md)    | Build target               | ES2021, same as Lit 3                               | Accepted |
+| [0006](docs/decisions/0006-mit-license.md)              | License                    | MIT                                                 | Accepted |
+
+## Browser support
+
+The build targets ES2021 ([ADR 0005](docs/decisions/0005-browser-target-es2021.md)) and
+needs no polyfills in:
+
+| Chrome / Edge | Firefox | Safari |
+| ------------- | ------- | ------ |
+| 85+           | 79+     | 14.1+  |
+
+Older browsers are not supported.
+
+## Development
+
+Requires Node 22+ and pnpm.
+
+```sh
+pnpm install
+pnpm dev         # serve the demo pages
+pnpm lint        # ESLint (with Lit and web-component rules)
+pnpm typecheck   # TypeScript strict
+pnpm build       # Vite library build → dist/index.js and dist/loader.js
+pnpm format      # Prettier
+```
 
 ## Roadmap
 
@@ -41,3 +69,7 @@ Tasks live as GitHub issues grouped by milestone. They were generated from
 [`scripts/github/tasks.json`](scripts/github/tasks.json) with
 [`scripts/github/setup_github.py`](scripts/github/setup_github.py).
 Workflow per task: issue → branch → decisions (ADR) → PR with `Closes #N` → CI → squash merge.
+
+## License
+
+[MIT](LICENSE) © Atefeh
