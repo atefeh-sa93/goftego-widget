@@ -40,3 +40,10 @@ merge, without a review requirement that one person cannot satisfy.
 
 - Every change, including docs and small fixes, needs a PR.
 - Until #4, a PR can be merged without CI passing; local checks are the only gate.
+
+## Update (#4)
+
+CI now exists, and the ruleset also requires these status checks to pass
+before merging: `Lint & typecheck`, `Unit tests`, `Build & size`,
+`E2E (chromium)`, `E2E (firefox)`, `E2E (webkit)`
+(see [ADR 0013](0013-parallel-ci-jobs.md)).
