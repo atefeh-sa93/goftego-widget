@@ -1,0 +1,15 @@
+{
+  // Node-side config files (Vite, ESLint), kept apart so Node types never leak into browser code
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["vite.config.ts", "eslint.config.js"]
+}
