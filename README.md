@@ -1,5 +1,8 @@
 # goftego-widget
 
+[![CI](https://github.com/atefeh-sa93/goftego-widget/actions/workflows/ci.yml/badge.svg)](https://github.com/atefeh-sa93/goftego-widget/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Framework-agnostic embeddable AI chat widget built with Lit web components and Shadow DOM.
 
 > **Status:** in development toward 1.0. Follow progress in
@@ -38,6 +41,10 @@ decisions it implements.
 | [0010](docs/decisions/0010-tests-in-separate-folder.md)              | Test location              | `tests/unit` and `tests/e2e`, not next to source                                 | Accepted |
 | [0011](docs/decisions/0011-coverage-threshold-80.md)                 | Coverage                   | V8, 80% threshold enforced by `pnpm test`                                        | Accepted |
 | [0012](docs/decisions/0012-skip-webkit-locally-on-macos-14.md)       | WebKit on old macOS        | Skipped locally on macOS ≤ 14; always run in CI                                  | Accepted |
+| [0013](docs/decisions/0013-parallel-ci-jobs.md)                      | CI structure               | Parallel jobs; E2E split per browser                                             | Accepted |
+| [0014](docs/decisions/0014-size-limit-on-dist-gzip.md)               | Size budget                | `dist` files, gzip: loader ≤ 5 kB, total ≤ 25 kB                                 | Accepted |
+| [0015](docs/decisions/0015-size-report-in-job-summary.md)            | Size reporting             | Table in the CI job summary, no PR bot                                           | Accepted |
+| [0016](docs/decisions/0016-pin-actions-by-sha.md)                    | Action pinning             | Commit SHAs, updated monthly by Dependabot                                       | Accepted |
 
 ## Browser support
 
@@ -63,7 +70,15 @@ pnpm build       # Vite library build → dist/index.js and dist/loader.js
 pnpm format      # Prettier
 pnpm test        # unit tests in real Chromium (Vitest browser mode) + coverage gate
 pnpm test:e2e    # Playwright E2E on the demo pages
+pnpm size        # gzip size of dist files against the budget (run after build)
 ```
+
+### CI
+
+Every push and pull request runs four parallel checks: **Lint & typecheck**, **Unit tests**,
+**Build & size** and **E2E** on Chromium, Firefox and WebKit. All of them must pass before a PR can
+be merged into `main` ([ADR 0007](docs/decisions/0007-protect-main-branch.md)). The size table
+is shown in each run's job summary.
 
 ### Testing
 

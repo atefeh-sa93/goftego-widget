@@ -1,0 +1,14 @@
+[
+  {
+    "name": "loader (always loaded)",
+    "path": "dist/loader.js",
+    "limit": "5 kB",
+    "gzip": true
+  },
+  {
+    "name": "total (all chunks)",
+    "path": "dist/*.js",
+    "limit": "25 kB",
+    "gzip": true
+  }
+]
