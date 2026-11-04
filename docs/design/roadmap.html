@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نقشه راه goftego-widget</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column; roadmap as a vertical day-by-day timeline, design as a live host-page frame beside its controls */
+:root{
+  --bg:#f4f7f6; --surface:#ffffff; --fg:#13201d; --muted:#5a6b66; --line:#d8e2df;
+  --accent:#0f766e; --accent-fg:#ffffff; --accent-soft:#dff0ec; --code:#eaf1ef;
+  --warn:#b45309;
+  --f-body:'Vazirmatn', Tahoma, system-ui, sans-serif;
+  --f-mono:'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1413; --surface:#141e1c; --fg:#e3ebe9; --muted:#93a6a1; --line:#24332f;
+  --accent:#2bc4b0; --accent-fg:#06201c; --accent-soft:#12302c; --code:#192623; --warn:#f59e0b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1413; --surface:#141e1c; --fg:#e3ebe9; --muted:#93a6a1; --line:#24332f;
+  --accent:#2bc4b0; --accent-fg:#06201c; --accent-soft:#12302c; --code:#192623; --warn:#f59e0b; color-scheme:dark}
+*{box-sizing:border-box}
+body{direction:rtl;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15.5px;line-height:1.85;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:40px 80px}
+.wrap{max-width:1080px;margin-inline:auto;display:grid;gap:72px}
+h1,h2,h3{text-wrap:balance;line-height:1.35;margin:0}
+h1{font-weight:900;font-size:clamp(30px,5vw,46px);letter-spacing:-.01em}
+h2{font-weight:900;font-size:26px}
+h3{font-weight:700;font-size:17px}
+p{margin:0}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+code{background:var(--code);padding:1px 6px;border-radius:5px;direction:ltr;unicode-bidi:isolate}
+.eyebrow{font-size:12.5px;letter-spacing:.06em;color:var(--accent);font-weight:700}
+.muted{color:var(--muted)}
+section{display:grid;gap:24px}
+.sec-head{display:grid;gap:6px;max-width:68ch}
+
+/* header */
+header{display:grid;gap:18px}
+header .tag{font-family:var(--f-mono);direction:ltr;text-align:right;color:var(--accent);font-size:15px}
+header p.lede{max-width:64ch;font-size:17px;color:var(--muted)}
+.stats{display:flex;flex-wrap:wrap;gap:0;border-block:1px solid var(--line)}
+.stat{flex:1 1 160px;padding:14px 4px;display:grid;gap:2px}
+.stat + .stat{border-inline-start:1px solid var(--line);padding-inline-start:18px}
+.stat b{font-size:24px;font-weight:900;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+
+/* roadmap */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{--c:var(--muted);display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:11.5px;
+  padding:1px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--c) 45%, transparent);color:var(--fg);
+  background:color-mix(in srgb,var(--c) 10%, transparent);direction:ltr;white-space:nowrap}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+button.chip{cursor:pointer;font-size:12px;padding:3px 11px}
+button.chip[aria-pressed="true"]{background:var(--c);color:#fff;border-color:var(--c)}
+button.chip[aria-pressed="true"]::before{background:#fff}
+.phase{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;padding-block:26px;border-top:1px solid var(--line)}
+.phase-meta{display:grid;gap:6px;align-content:start;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+.phase-meta .day{font-weight:900;font-size:40px;line-height:1;color:var(--accent)}
+.phase-meta .ms{font-family:var(--f-mono);font-size:12px;color:var(--muted);direction:ltr;text-align:right}
+.phase-meta .count{font-size:13px;color:var(--muted)}
+.phase.backlog .day{color:var(--muted)}
+.tasks{display:grid;gap:8px;min-width:0}
+details.task{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+details.task[hidden]{display:none}
+details.task summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;padding:12px 16px}
+details.task summary::-webkit-details-marker{display:none}
+details.task summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
+.num{font-family:var(--f-mono);font-weight:600;color:var(--accent);font-size:13px;direction:ltr;padding-top:3px;min-width:2.6em}
+.t-fa{font-weight:500}
+.t-en{grid-column:2;font-family:var(--f-mono);font-size:12px;color:var(--muted);direction:ltr;text-align:right}
+.t-labels{grid-column:2;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start}
+details.task ul{margin:0;padding:0 16px 14px 16px;list-style:none;display:grid;gap:4px;direction:ltr;text-align:left;
+  font-size:13px;border-top:1px dashed var(--line);padding-top:12px;margin-inline:16px;padding-inline:0}
+details.task li::before{content:"☐  ";color:var(--muted)}
+details.task[open]{border-color:var(--accent)}
+.note{font-size:13.5px;color:var(--muted);border-inline-start:3px solid var(--warn);padding-inline-start:12px}
+
+/* design */
+.design{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.frame{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fbfaf7;color:#1f2522}
+.frame-bar{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#ebe8e1;border-bottom:1px solid #d9d4ca}
+.frame-bar i{width:10px;height:10px;border-radius:50%;background:#cfc8bb;display:block}
+.frame-bar .url{flex:1;margin-inline-start:8px;background:#fff;border-radius:6px;padding:2px 10px;font-family:var(--f-mono);font-size:11.5px;color:#6d6a63;direction:ltr;text-align:left;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.site{position:relative;height:560px;overflow:hidden;font-family:Georgia, 'Times New Roman', serif}
+.site-inner{padding:26px 28px;display:grid;gap:14px;max-width:440px}
+.site-inner .logo{font-weight:700;font-size:20px;font-family:var(--f-body)}
+.site-inner h4{margin:0;font-size:26px;line-height:1.3;font-family:var(--f-body);font-weight:900}
+.site-inner p{font-family:var(--f-body);color:#4b524e;font-size:14px}
+.site-inner .btn{justify-self:start;background:#1f2522;color:#fbfaf7;border:0;border-radius:6px;padding:8px 16px;font-family:var(--f-body);font-size:14px}
+.site-inner .ph{height:12px;border-radius:4px;background:#e6e2d9}
+/* hostile host CSS: what a careless site does to everything */
+.site.hostile{font-family:'Comic Sans MS','Chalkboard SE',cursive !important;color:#d40078 !important;line-height:3 !important;
+  letter-spacing:.2em;background:repeating-linear-gradient(45deg,#fff7c2 0 14px,#ffe066 14px 28px)}
+.site.hostile .site-inner *{all:unset !important;display:block !important;font-family:inherit !important;margin:6px 0 !important}
+.controls{display:grid;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.ctl{display:grid;gap:8px}
+.ctl > span{font-size:13px;font-weight:700}
+.ctl > span code{font-weight:400}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--surface);outline:1px solid var(--line);cursor:pointer}
+.sw[aria-pressed="true"]{outline:2px solid var(--fg)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:none;border:0;padding:5px 12px;font:inherit;font-size:13px;color:var(--fg);cursor:pointer}
+.seg button + button{border-inline-start:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.toggle{display:flex;align-items:center;gap:10px;font-size:13.5px;cursor:pointer}
+.toggle input{accent-color:var(--accent);width:18px;height:18px}
+.log{font-family:var(--f-mono);font-size:11.5px;direction:ltr;text-align:left;background:var(--code);border-radius:8px;padding:10px;height:150px;overflow:auto;display:grid;align-content:start;gap:3px}
+.log .ev{color:var(--accent);font-weight:600}
+.log .empty{color:var(--muted)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.design-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;font-size:14px}
+.design-notes div{display:grid;gap:4px}
+
+/* tools */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+th,td{text-align:right;padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:12.5px;color:var(--muted);font-weight:700;background:var(--code)}
+td.tool{font-family:var(--f-mono);font-size:13px;direction:ltr;text-align:right;white-space:nowrap;font-weight:600}
+
+/* output */
+pre{margin:0;background:var(--code);border-radius:10px;padding:16px 18px;overflow-x:auto;direction:ltr;text-align:left;font-family:var(--f-mono);font-size:12.5px;line-height:1.7}
+pre .c{color:var(--muted)} pre .k{color:var(--accent);font-weight:600}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px}
+.node{flex:1 1 170px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:3px;align-content:start}
+.node b{font-size:14px}
+.node span{font-size:12.5px;color:var(--muted)}
+.node.hl{border-color:var(--accent);background:var(--accent-soft)}
+.arrow{align-self:center;color:var(--muted);font-size:18px}
+.deliv{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border-top:1px solid var(--line)}
+.deliv div{padding:16px 4px;border-bottom:1px solid var(--line);display:grid;gap:4px;padding-inline-end:18px}
+.deliv div span{font-size:13.5px;color:var(--muted)}
+.resume{font-family:var(--f-mono);font-size:13px;direction:ltr;text-align:left;border-inline-start:3px solid var(--accent);padding:6px 14px;color:var(--fg);line-height:1.7}
+
+/* github */
+.steps{display:grid;gap:0;counter-reset:s;margin:0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding-block:14px;border-bottom:1px solid var(--line)}
+.steps li::before{content:counter(s);font-weight:900;font-size:22px;color:var(--accent);line-height:1.4}
+.steps li div{display:grid;gap:3px;min-width:0}
+.steps li span{font-size:14px;color:var(--muted)}
+
+@media (max-width:820px){
+  .phase{grid-template-columns:1fr;gap:14px}
+  .phase-meta{position:static;grid-template-columns:auto 1fr;align-items:end;column-gap:14px}
+  .phase-meta .day{grid-row:span 3}
+  .design{grid-template-columns:1fr}
+  .site{height:520px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="tag">&lt;goftego-chat&gt; · goftego-widget</div>
+  <h1>نقشه راه ویجت چت قابل‌جاسازی</h1>
+  <p class="lede">چت Goftego به یک custom element تبدیل می‌شود که با یک تگ script در هر سایتی کار می‌کند. این صفحه نشان می‌دهد کار به چه فازها و تسک‌هایی شکسته می‌شود، با چه ابزارهایی ساخته می‌شود، در نهایت چه چیزی تحویل داده می‌شود و ظاهر ویجت چطور است.</p>
+  <div class="stats">
+    <div class="stat"><b>۴ فاز</b><span>روز ۰ تا ۳، به‌اضافه بک‌لاگ</span></div>
+    <div class="stat"><b>۲۶ تسک</b><span>برای نسخه 1.0، هر تسک یک issue</span></div>
+    <div class="stat"><b>&lt; 5 kB</b><span>loader، gzip (کل زیر 25 kB)</span></div>
+    <div class="stat"><b>۳ موتور</b><span>Chromium، Firefox، WebKit در CI</span></div>
+  </div>
+</header>
+
+<section id="roadmap">
+  <div class="sec-head">
+    <span class="eyebrow">۱ · رودمپ و تسک‌ها</span>
+    <h2>چهار فاز، هر فاز یک milestone در گیت‌هاب</h2>
+    <p class="muted">شماره هر تسک همان شماره issue در گیت‌هاب است. روی هر تسک بزنید تا معیارهای پذیرش (acceptance criteria) را ببینید. با برچسب‌ها فیلتر کنید.</p>
+  </div>
+  <div class="filters" id="filters"></div>
+  <div id="phases"></div>
+  <p class="note">اگر عقب افتادید، تسک‌های با برچسب <span class="chip" style="--c:#f59e0b">cuttable</span> (دموی strict-csp و تایپ Vue) به نسخه 1.1 می‌روند. ایزوله‌سازی، lazy loading، دسترس‌پذیری و دموی React و HTML خالی قابل حذف نیستند.</p>
+</section>
+
+<section id="design">
+  <div class="sec-head">
+    <span class="eyebrow">۲ · دیزاین</span>
+    <h2>ویجت روی یک سایت میزبان</h2>
+    <p class="muted">این پیش‌نمایش خودش یک web component واقعی با shadow DOM است و با حالت mock جواب stream می‌دهد. رنگ را با <code>--gc-accent</code> عوض کنید، جهت را تغییر دهید، یا CSS خصمانه سایت میزبان را روشن کنید تا ببینید ویجت خراب نمی‌شود.</p>
+  </div>
+  <div class="design">
+    <div class="frame">
+      <div class="frame-bar"><i></i><i></i><i></i><div class="url">https://shop.example/</div></div>
+      <div class="site" id="site">
+        <div class="site-inner">
+          <div class="logo">کتاب‌سرای نمونه</div>
+          <h4>کتاب‌های تازه این هفته</h4>
+          <p>این یک سایت میزبان فرضی است. ویجت فقط با دو خط HTML به آن اضافه شده و از استایل این صفحه چیزی نمی‌گیرد.</p>
+          <button class="btn" type="button">مشاهده فهرست</button>
+          <div class="ph" style="width:92%"></div><div class="ph" style="width:76%"></div><div class="ph" style="width:84%"></div>
+        </div>
+        <goftego-chat-preview id="gc" dir="rtl" title="پشتیبانی" open></goftego-chat-preview>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="ctl"><span>رنگ اصلی · <code>--gc-accent</code></span><div class="row" id="swatches"></div></div>
+      <div class="ctl"><span>گردی گوشه · <code>--gc-radius</code></span><div class="seg" id="radius"><button type="button" data-v="4px">4</button><button type="button" data-v="14px" aria-pressed="true">14</button><button type="button" data-v="24px">24</button></div></div>
+      <div class="ctl"><span>جهت · <code>dir</code></span><div class="seg" id="dir"><button type="button" data-v="rtl" aria-pressed="true">rtl · فارسی</button><button type="button" data-v="ltr">ltr · English</button></div></div>
+      <label class="toggle"><input type="checkbox" id="hostile"> CSS خصمانه سایت میزبان</label>
+      <div class="ctl"><span>رویدادهایی که صفحه میزبان می‌شنود</span><div class="log" id="log"><div class="empty">// open the widget to see gc-* events</div></div></div>
+    </div>
+  </div>
+  <div class="design-notes">
+    <div><h3>launcher سبک</h3><p class="muted">فقط دکمه گرد با loader زیر ۵ کیلوبایت می‌آید. پنل در اولین کلیک با import پویا بارگذاری می‌شود.</p></div>
+    <div><h3>پنل dialog</h3><p class="muted">هدر رنگی با عنوان، لیست پیام‌ها، ورودی و دکمه ارسال که حین stream به «توقف» تبدیل می‌شود. Esc پنل را می‌بندد و فوکوس به launcher برمی‌گردد.</p></div>
+    <div><h3>تم‌پذیر بدون شکستن ایزوله‌سازی</h3><p class="muted">شش متغیر <code>--gc-*</code> و پنج part: launcher، panel، header، message، input.</p></div>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="sec-head">
+    <span class="eyebrow">۳ · ابزارها</span>
+    <h2>Stack و دلیل هر انتخاب</h2>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>بخش</th><th>ابزار</th><th>چرا</th></tr></thead>
+    <tbody>
+      <tr><td>کامپوننت</td><td class="tool">Lit 3 + TypeScript strict</td><td>خودش web component است، حدود ۵ کیلوبایت، با هیچ فریم‌ورکی تداخل ندارد. استایل با constructable stylesheets.</td></tr>
+      <tr><td>ایزوله‌سازی و تم</td><td class="tool">Shadow DOM · --gc-* · ::part()</td><td>تنها راه ایزوله‌سازی واقعی در هر دو جهت؛ متغیرها و partها تنها راه‌های استاندارد عبور از مرز shadow.</td></tr>
+      <tr><td>Build</td><td class="tool">Vite (library mode)</td><td>خروجی ESM برای npm و یک loader جدا برای CDN؛ پنل یک chunk جدا.</td></tr>
+      <tr><td>Stream</td><td class="tool">sse.ts (از Goftego) + mock.ts</td><td>منطق یک بار نوشته می‌شود؛ mock برای دمو و تست بدون سرور.</td></tr>
+      <tr><td>Markdown</td><td class="tool">رندرر دست‌ساز</td><td>فقط bold، code، لیست و لینک؛ بدون innerHTML؛ کتابخانه کامل بودجه حجم را می‌شکند.</td></tr>
+      <tr><td>تست واحد</td><td class="tool">Vitest (browser mode)</td><td>web component و shadow DOM در مرورگر واقعی تست می‌شوند، نه شبیه‌سازی.</td></tr>
+      <tr><td>تست E2E</td><td class="tool">Playwright × 3 engines</td><td>ثابت می‌کند ویجت در React، Vue، HTML خالی، صفحه hostile و CSP سخت کار می‌کند.</td></tr>
+      <tr><td>دسترس‌پذیری</td><td class="tool">@axe-core/playwright</td><td>بررسی خودکار پنل باز.</td></tr>
+      <tr><td>حجم</td><td class="tool">size-limit</td><td>loader زیر ۵ و کل زیر ۲۵ کیلوبایت gzip، در CI شکسته شود PR قرمز می‌شود.</td></tr>
+      <tr><td>نسخه‌گذاری</td><td class="tool">Changesets</td><td>این یک SDK با API عمومی است؛ semver و changelog خودکار.</td></tr>
+      <tr><td>CI و انتشار</td><td class="tool">GitHub Actions · npm · jsDelivr · Pages</td><td>ci.yml روی هر push و PR؛ deploy-demos.yml برای دموها؛ CDN خودکار از npm.</td></tr>
+      <tr><td>محیط</td><td class="tool">pnpm · Node 22</td><td>همان چیزی که در CI استفاده می‌شود.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="output">
+  <div class="sec-head">
+    <span class="eyebrow">۴ · خروجی نهایی</span>
+    <h2>صاحب سایت فقط همین را اضافه می‌کند</h2>
+  </div>
+<pre><span class="k">&lt;script</span> type="module" src="https://cdn.jsdelivr.net/npm/goftego-widget@1/dist/loader.js"<span class="k">&gt;&lt;/script&gt;</span>
+<span class="k">&lt;goftego-chat</span> endpoint="/api/chat" title="پشتیبانی" lang="fa" dir="rtl" position="bottom-end"<span class="k">&gt;&lt;/goftego-chat&gt;</span>
+
+<span class="c">&lt;!-- optional theming --&gt;</span>
+<span class="k">&lt;style&gt;</span> goftego-chat { --gc-accent: #0f766e; --gc-radius: 12px; } <span class="k">&lt;/style&gt;</span></pre>
+  <div class="flow" aria-label="مسیر بارگذاری و داده">
+    <div class="node"><b>صفحه میزبان</b><span>React، Vue یا HTML خالی</span></div>
+    <span class="arrow" aria-hidden="true">←</span>
+    <div class="node hl"><b>loader.js</b><span>&lt; 5 kB · ثبت element و فقط launcher</span></div>
+    <span class="arrow" aria-hidden="true">←</span>
+    <div class="node"><b>کلیک اول: import()</b><span>chunk پنل در shadow root</span></div>
+    <span class="arrow" aria-hidden="true">←</span>
+    <div class="node"><b>endpoint صاحب سایت</b><span>SSE روی /api/chat؛ رویدادهای gc-* به صفحه برمی‌گردند</span></div>
+  </div>
+  <div class="deliv">
+    <div><h3>پکیج npm</h3><span><code>goftego-widget@1.0.0</code> با خروجی ESM، loader جدا و تایپ‌های TypeScript برای React و Vue</span></div>
+    <div><h3>CDN</h3><span>jsDelivr و unpkg هر نسخه npm را خودکار منتشر می‌کنند؛ پیشنهاد <code>@1.0.0</code> یا <code>@1</code></span></div>
+    <div><h3>دموهای زنده</h3><span>روی GitHub Pages: plain، react، vue، hostile، strict-csp</span></div>
+    <div><h3>README به‌عنوان مستند SDK</h3><span>GIF زیر ۱۵ ثانیه، Quick start، جدول API، پروتکل endpoint، تصمیم‌های فنی، محدودیت‌ها</span></div>
+    <div><h3>CI سبز</h3><span>lint، typecheck، تست واحد، size و E2E روی سه موتور، با badge</span></div>
+    <div><h3>جمله رزومه</h3><span>یک خط قابل دفاع با عدد واقعی حجم و تست‌ها</span></div>
+  </div>
+  <p class="resume">Built goftego-widget, a framework-agnostic embeddable chat widget shipped as a Lit web component with Shadow DOM style isolation, CSS-variable theming, a 5 kB lazy loader, typed DOM events, and Playwright tests proving it works inside React, Vue and plain HTML hosts.</p>
+</section>
+
+<section id="github">
+  <div class="sec-head">
+    <span class="eyebrow">۵ · گردش کار در گیت‌هاب</span>
+    <h2>هر تسک: issue ← branch ← PR ← CI ← merge ← Done</h2>
+  </div>
+  <ol class="steps">
+    <li><div><h3>ساخت ریپو و وارد کردن تسک‌ها</h3><span>اسکریپت <code>setup_github.py</code> پنج milestone، یازده برچسب و ۳۰ issue می‌سازد و همه را به یک Project board اضافه می‌کند.</span></div></li>
+    <li><div><h3>یک branch برای هر issue</h3><span>مثلاً <code>6-element-attributes</code> از روی main.</span></div></li>
+    <li><div><h3>Pull request با <code>Closes #6</code></h3><span>این عبارت در توضیح PR باعث می‌شود issue بعد از merge خودکار بسته شود.</span></div></li>
+    <li><div><h3>CI باید سبز شود</h3><span>با branch protection روی main، تا lint، تست، size و E2E پاس نشوند merge ممکن نیست.</span></div></li>
+    <li><div><h3>Squash merge و حذف branch</h3><span>issue بسته می‌شود، کارت در Project به ستون Done می‌رود و درصد milestone بالا می‌رود.</span></div></li>
+  </ol>
+</section>
+</div>
+
+<script type="application/json" id="tasks-data">{"milestones": [{"key": "M0", "title": "M0 · Setup", "fa": "روز ۰ — آماده‌سازی", "description": "Learning spike, repo scaffold, test tooling, CI and the API contract."}, {"key": "M1", "title": "M1 · Element & public API", "fa": "روز ۱ — element، launcher و API عمومی", "description": "Custom element, attributes, methods, typed events, launcher, theming, RTL, safe registration."}, {"key": "M2", "title": "M2 · Lazy chat panel", "fa": "روز ۲ — پنل چت lazy", "description": "Lazy-loaded panel, SSE + mock streaming, safe markdown, accessibility."}, {"key": "M3", "title": "M3 · Hosts, tests & release", "fa": "روز ۳ — میزبان‌ها، تست، انتشار", "description": "React/Vue/hostile/CSP demos, full test suite, npm 1.0.0, GitHub Pages, README."}, {"key": "BL", "title": "Backlog · v1.1+", "fa": "بعد از ۱.۰ — Roadmap", "description": "Post-1.0 roadmap items. Documented in README, not built in 1.0."}], "labels": [{"name": "setup", "color": "6b7280"}, {"name": "feature", "color": "0f766e"}, {"name": "a11y", "color": "7c3aed"}, {"name": "security", "color": "b91c1c"}, {"name": "test", "color": "2563eb"}, {"name": "ci", "color": "475569"}, {"name": "docs", "color": "ca8a04"}, {"name": "release", "color": "16a34a"}, {"name": "demo", "color": "db2777"}, {"name": "cuttable", "color": "f59e0b"}, {"name": "roadmap", "color": "94a3b8"}], "tasks": [{"n": 1, "m": "M0", "labels": ["setup"], "title": "Spike: Lit tutorial and a tiny custom element", "fa": "یک ساعت آموزش رسمی Lit؛ یک element کوچک با یک attribute و یک رویداد؛ بررسی shadow root در DevTools", "tasks": ["Finish the official lit.dev tutorial", "Build a throwaway element that takes one attribute and dispatches one event", "Inspect the shadow root in DevTools and confirm page styles do not leak in", "Write 3–5 notes in docs/notes.md (not shipped)"]}, {"n": 2, "m": "M0", "labels": ["setup"], "title": "Scaffold repo: Vite library mode, Lit 3, TypeScript strict, ESLint", "fa": "ساخت ریپو با pnpm، Vite library mode، Lit 3، TS strict، ESLint و Prettier و ساختار پوشه‌ها", "tasks": ["pnpm init, add lit, vite, typescript", "tsconfig with strict: true", "vite.config.ts in library mode with two entries: index (ESM) and loader", "ESLint + Prettier, scripts: lint, typecheck, build", "Create the folder layout from the plan (src/element, src/panel, src/stream, demos, tests)", "MIT license, .gitignore, .editorconfig"]}, {"n": 3, "m": "M0", "labels": ["setup", "test"], "title": "Test tooling: Vitest browser mode and Playwright on 3 engines", "fa": "راه‌اندازی Vitest در browser mode و Playwright با Chromium، Firefox و WebKit", "tasks": ["Vitest browser mode with Playwright provider", "playwright.config.ts with chromium, firefox, webkit projects", "One smoke unit test and one smoke e2e test", "Scripts: test, test:e2e"]}, {"n": 4, "m": "M0", "labels": ["ci"], "title": "CI workflow and size-limit budget", "fa": "فایل ci.yml (lint، typecheck، تست، build، size، e2e) و بودجه حجم: loader زیر ۵KB و کل زیر ۲۵KB", "tasks": [".github/workflows/ci.yml on push and pull_request (pnpm, Node 22)", "Install Playwright browsers for all three engines", ".size-limit.json: loader < 5 kB gzip, total < 25 kB gzip", "Script: size", "Protect main: require CI to pass before merge"]}, {"n": 5, "m": "M0", "labels": ["docs"], "title": "Write the public API contract in README first", "fa": "اول جدول API (attributeها، property، متدها، رویدادها، متغیرهای CSS، partها) در README، بعد کد", "tasks": ["Table: endpoint, title, lang, dir, position, open, mock attributes", "headers property (JS only) and why", "Methods open(), close(), send(text)", "Events gc-open, gc-close, gc-message {role,text}, gc-error {message,retryable}", "CSS variables --gc-accent/bg/fg/radius/font/z and parts launcher/panel/header/message/input", "State that this API is protected by semver from 1.0"]}, {"n": 6, "m": "M1", "labels": ["feature"], "title": "GoftegoChat element: attributes and properties", "fa": "کلاس GoftegoChat با همه attributeها، property مربوط به headers و همگام بودن open در هر دو جهت", "tasks": ["LitElement with reactive properties for endpoint, title, lang, dir, position, open, mock", "open reflects to the attribute both ways", "headers is a property only, never an attribute", "Unit test: attribute ↔ property sync"]}, {"n": 7, "m": "M1", "labels": ["feature"], "title": "Public methods and typed gc-* events", "fa": "متدهای open/close/send و رویدادهای تایپ‌شده gc-* با bubbles و composed", "tasks": ["src/events.ts with typed detail interfaces and a dispatch helper", "All events use bubbles: true, composed: true", "open(), close(), send(text) methods", "HTMLElementEventMap augmentation so addEventListener is typed", "Unit test: events leave the shadow root with the right detail"]}, {"n": 8, "m": "M1", "labels": ["feature"], "title": "Launcher button and theming with --gc-* and ::part", "fa": "دکمه launcher، توکن‌های تم روی :host با all: initial، و part برای سفارشی‌سازی", "tasks": ["styles.ts: :host { all: initial } then re-set tokens", "Defaults for --gc-accent, --gc-bg, --gc-fg, --gc-radius, --gc-font, --gc-z (high default)", "Launcher.ts with part=\"launcher\"", "Constructable stylesheets only (no inline style tags)"]}, {"n": 9, "m": "M1", "labels": ["feature"], "title": "i18n and RTL: lang, dir, built-in fa/en strings, strings property", "fa": "چندزبانگی: متن‌های داخلی فارسی و انگلیسی با lang، جهت خودکار از روی زبان، property به اسم strings برای زبان‌های دیگر، و position منطقی که در RTL جابه‌جا شود", "tasks": ["Built-in UI strings for fa and en (placeholder, send, stop, retry, close, error messages)", "lang picks the strings; an unknown lang falls back to en", "dir defaults from lang (fa, ar, he, ur → rtl) when not set explicitly", "strings property (JS only, partial object) overrides any UI string for other languages", "position uses logical properties: bottom-end sits on the left in RTL", "Unit test: switching lang/dir updates UI text and the launcher side"]}, {"n": 10, "m": "M1", "labels": ["feature"], "title": "loader.ts and safe custom element registration", "fa": "فایل loader و ثبت امن: اگر اسکریپت دو بار در صفحه بود، دوباره ثبت نشود", "tasks": ["loader.ts registers the element and renders only the launcher", "Guard with customElements.get('goftego-chat') before define", "Unit test: loading the script twice throws nothing", "Several instances on one page work independently"]}, {"n": 11, "m": "M1", "labels": ["demo", "ci"], "title": "demos/plain page and first green CI", "fa": "صفحه دموی HTML خالی و اولین CI سبز", "tasks": ["demos/plain/index.html using the two-line snippet", "Vite dev server serves demos", "CI is green on main"]}, {"n": 12, "m": "M2", "labels": ["feature"], "title": "Lazy-load the chat panel on first open", "fa": "بارگذاری پنل با import پویا فقط در اولین باز شدن؛ بررسی در تب Network", "tasks": ["Dynamic import() of src/panel on first open", "Panel is a separate chunk in the build output", "Show a tiny loading state while the chunk loads", "Check in the Network tab and note the chunk size"]}, {"n": 13, "m": "M2", "labels": ["feature"], "title": "Port sse.ts from Goftego and add mock mode", "fa": "انتقال منطق SSE از Goftego و حالت mock با جواب‌های ضبط‌شده برای دموی بدون سرور", "tasks": ["src/stream/sse.ts: fetch + ReadableStream parser, AbortController", "Send headers property on every request", "src/stream/mock.ts replays recorded responses with realistic timing", "Document the SSE protocol in README (Endpoint protocol section)"]}, {"n": 14, "m": "M2", "labels": ["feature"], "title": "Chat panel: message list, composer, Stop, Retry, errors", "fa": "ChatPanel، MessageList و Composer؛ stream جواب، دکمه Stop، Retry و حالت‌های خطا", "tasks": ["ChatPanel.ts, MessageList.ts, Composer.ts with parts panel/header/message/input", "Streamed tokens append to the last message", "Stop aborts the stream; Retry resends the last user message", "Network/HTTP errors fire gc-error with retryable", "gc-message fires after each finished message"]}, {"n": 15, "m": "M2", "labels": ["feature", "security"], "title": "Small, safe markdown renderer with XSS tests first", "fa": "رندرر markdown کوچک (bold، code، لیست، لینک) بدون innerHTML؛ تست‌های XSS اول نوشته شوند", "tasks": ["Write XSS tests first: <script>, onerror, javascript: links", "Build DOM nodes / Lit templates only, never innerHTML", "Support bold, inline code, code blocks, lists, links", "Links get rel=\"noopener noreferrer\" and target=\"_blank\"; only http(s) allowed"]}, {"n": 16, "m": "M2", "labels": ["a11y"], "title": "Accessibility: dialog, focus trap, Esc, focus return, aria-live", "fa": "دسترس‌پذیری: role=dialog، focus trap، بستن با Esc، برگشت فوکوس به launcher، aria-live برای جواب", "tasks": ["role=\"dialog\" with aria-label from title (labels stay inside the shadow root)", "focus-trap.ts: Tab and Shift+Tab cycle inside the panel", "Esc closes and returns focus to the launcher", "aria-live=\"polite\" region for assistant replies", "Unit test for the focus trap"]}, {"n": 17, "m": "M3", "labels": ["demo", "feature"], "title": "React 19 demo and JSX types", "fa": "دموی React 19 با Vite و تایپ‌های JSX برای استفاده تایپ‌شده در React", "tasks": ["demos/react with Vite + React 19", "src/types/jsx.d.ts declares <goftego-chat> props and events", "Demo listens to gc-message and shows it on the host page"]}, {"n": 18, "m": "M3", "labels": ["demo", "feature", "cuttable"], "title": "Vue 3 demo and Vue types", "fa": "دموی Vue 3 و تایپ برای Vue (اگر عقب افتادی، به ۱.۱ منتقل می‌شود)", "tasks": ["demos/vue with Vite + Vue 3 (isCustomElement config)", "src/types/vue.d.ts for GlobalComponents", "Demo listens to gc-message"]}, {"n": 19, "m": "M3", "labels": ["demo"], "title": "Hostile CSS demo page", "fa": "صفحه hostile با CSS سراسری تهاجمی تا ثابت شود ویجت خراب نمی‌شود", "tasks": ["demos/hostile with * { all: unset !important }, odd fonts, colors, line-height", "Widget looks identical to the plain demo"]}, {"n": 20, "m": "M3", "labels": ["demo", "security", "cuttable"], "title": "Strict CSP demo page", "fa": "صفحه با CSP سخت‌گیرانه بدون unsafe-inline (اگر عقب افتادی، به ۱.۱ منتقل می‌شود)", "tasks": ["demos/strict-csp with a CSP meta that has no 'unsafe-inline' in style-src", "No CSP errors in the console and the widget works"]}, {"n": 21, "m": "M3", "labels": ["test"], "title": "Complete unit test suite", "fa": "تکمیل تست‌های واحد: همگامی attribute/property، رویدادها، ثبت دوباره، markdown، focus trap", "tasks": ["attribute ↔ property sync (open both ways)", "gc-* events are composed and carry the right detail", "Re-registering the element throws nothing", "Markdown output and XSS cases", "Focus trap cycles with Tab and Shift+Tab"]}, {"n": 22, "m": "M3", "labels": ["test"], "title": "Playwright E2E across all demos on 3 engines", "fa": "تست E2E روی همه دموها و هر سه موتور: stream، lazy، hostile، تم، CSP، RTL، axe", "tasks": ["plain/react/vue: open, send, see streamed reply, Stop, host receives gc-message", "Lazy: panel chunk absent before click, present after", "Hostile: toHaveScreenshot matches the plain page", "Theme: changing --gc-accent recolors the launcher", "Strict CSP: no console errors", "RTL: launcher bottom-left, text right-aligned", "@axe-core/playwright on the open panel"]}, {"n": 23, "m": "M3", "labels": ["release"], "title": "Release 1.0.0 to npm with Changesets", "fa": "انتشار نسخه 1.0.0 روی npm با Changesets؛ CDN از طریق jsDelivr خودکار", "tasks": ["Set up Changesets and a release workflow", "package.json exports, types, files, sideEffects", "Publish goftego-widget@1.0.0", "Verify cdn.jsdelivr.net/npm/goftego-widget@1/dist/loader.js loads"]}, {"n": 24, "m": "M3", "labels": ["ci", "demo"], "title": "Deploy demos to GitHub Pages", "fa": "workflow جدا برای انتشار دموها روی GitHub Pages", "tasks": [".github/workflows/deploy-demos.yml", "All demo pages reachable from an index page", "Link the live demos from README"]}, {"n": 25, "m": "M3", "labels": ["docs"], "title": "Final README", "fa": "README کامل: badgeها، GIF، Quick start، API reference، پروتکل، تصمیم‌های فنی، محدودیت‌ها، نسخه‌گذاری", "tasks": ["One-line summary + npm, gzip size, CI, license badges", "GIF under 15 s: same widget in React, Vue and plain HTML; streaming; recolor with one CSS variable", "Quick start, npm install, React and Vue usage with types", "API reference and Endpoint protocol", "Architecture diagram", "Technical decisions (5) + security", "Bundle size, browser support, known limitations", "How I used AI, versioning policy (@1.0.0 vs @1 trade-off), Roadmap"]}, {"n": 26, "m": "M3", "labels": ["docs"], "title": "Repo settings: description, topics, social preview, pin", "fa": "تنظیمات ریپو: توضیح یک‌خطی، topicها، تصویر social preview و pin در پروفایل", "tasks": ["Description: Framework-agnostic embeddable AI chat widget built with Lit web components and Shadow DOM", "Topics: web-components, lit, shadow-dom, custom-elements, widget, micro-frontends, typescript, sse", "Social preview image of the open widget", "Pin on profile"]}, {"n": 27, "m": "BL", "labels": ["roadmap"], "title": "Embed the widget on the portfolio site", "fa": "قرار دادن ویجت در سایت پورتفولیو تا بازدیدکننده‌ها درباره پروژه‌ها سؤال بپرسند", "tasks": ["Add the two-line snippet to the portfolio", "Point it at a real /api/chat endpoint"]}, {"n": 28, "m": "BL", "labels": ["roadmap"], "title": "v1.1: inline mode (in-page, not floating)", "fa": "نسخه ۱.۱: حالت inline داخل صفحه", "tasks": ["Design the attribute (e.g. mode=\"inline\") as a minor, non-breaking addition"]}, {"n": 29, "m": "BL", "labels": ["roadmap"], "title": "v1.1: persist conversation in sessionStorage", "fa": "نسخه ۱.۱: ذخیره گفتگو در sessionStorage", "tasks": ["Opt-in attribute, keyed per endpoint"]}, {"n": 30, "m": "BL", "labels": ["roadmap"], "title": "v1.2: Declarative Shadow DOM for SSR", "fa": "نسخه ۱.۲: Declarative Shadow DOM برای SSR", "tasks": ["Render the launcher without JavaScript"]}]}</script>
+<script>
+(() => {
+  const data = JSON.parse(document.getElementById('tasks-data').textContent);
+  const labelColor = Object.fromEntries(data.labels.map(l => [l.name, '#' + l.color]));
+  const faDigits = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+  const dayLabel = { M0: '۰', M1: '۱', M2: '۲', M3: '۳', BL: '+' };
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const chip = name => { const c = el('span', 'chip', name); c.style.setProperty('--c', labelColor[name]); return c; };
+
+  const phases = document.getElementById('phases');
+  for (const m of data.milestones) {
+    const list = data.tasks.filter(t => t.m === m.key);
+    const sec = el('div', 'phase' + (m.key === 'BL' ? ' backlog' : ''));
+    const meta = el('div', 'phase-meta');
+    meta.append(el('div', 'day', dayLabel[m.key]), el('h3', null, m.fa), el('div', 'ms', m.title), el('div', 'count', faDigits(list.length) + ' تسک'));
+    const box = el('div', 'tasks');
+    for (const t of list) {
+      const d = el('details', 'task'); d.dataset.labels = t.labels.join(' ');
+      const s = el('summary');
+      const labels = el('div', 't-labels'); t.labels.forEach(l => labels.append(chip(l)));
+      s.append(el('span', 'num', '#' + t.n), el('span', 't-fa', t.fa), el('span', 't-en', t.title), labels);
+      const ul = el('ul'); t.tasks.forEach(x => ul.append(el('li', null, x)));
+      d.append(s, ul); box.append(d);
+    }
+    sec.append(meta, box); phases.append(sec);
+  }
+
+  const filters = document.getElementById('filters');
+  let active = null;
+  const allBtn = el('button', 'chip', 'all'); allBtn.type = 'button'; allBtn.setAttribute('aria-pressed', 'true'); allBtn.style.setProperty('--c', 'var(--accent)');
+  filters.append(allBtn);
+  const btns = [allBtn];
+  for (const l of data.labels) {
+    const b = el('button', 'chip', l.name); b.type = 'button'; b.dataset.l = l.name; b.setAttribute('aria-pressed', 'false'); b.style.setProperty('--c', '#' + l.color);
+    filters.append(b); btns.push(b);
+  }
+  filters.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    active = b.dataset.l && active !== b.dataset.l ? b.dataset.l : null;
+    btns.forEach(x => x.setAttribute('aria-pressed', String((x.dataset.l || null) === active)));
+    document.querySelectorAll('details.task').forEach(d => { d.hidden = !!active && !d.dataset.labels.split(' ').includes(active); });
+    document.querySelectorAll('.phase').forEach(p => { p.hidden = !p.querySelector('details.task:not([hidden])'); });
+  });
+})();
+
+/* ---------- live preview: a real custom element with shadow DOM ---------- */
+(() => {
+  const STR = {
+    fa: { sub: 'آنلاین · پاسخ با هوش مصنوعی', ph: 'پیامتان را بنویسید…', send: 'ارسال', stop: 'توقف', close: 'بستن', open: 'باز کردن چت', stopped: ' (متوقف شد)',
+      hello: 'سلام! من دستیار پشتیبانی هستم. درباره **ارسال**، **مرجوعی** یا سفارش بپرسید.',
+      chips: ['زمان ارسال چقدره؟', 'چطور مرجوع کنم؟'],
+      replies: [
+        'ارسال در تهران **۱ تا ۲ روز کاری** و در شهرستان‌ها **۳ تا ۵ روز کاری** طول می‌کشد.\n- سفارش‌های بالای ۵۰۰ هزار تومان ارسال رایگان دارند\n- کد رهگیری بعد از ارسال پیامک می‌شود',
+        'برای مرجوعی تا **۷ روز** فرصت دارید:\n- از بخش «سفارش‌های من» درخواست ثبت کنید\n- کتاب را با فاکتور برگردانید\n- مبلغ ظرف ۳ روز کاری برمی‌گردد',
+        'این یک جواب ضبط‌شده در حالت `mock` است. در نسخه واقعی، جواب از endpoint سایت شما به‌صورت **SSE** stream می‌شود.'
+      ] },
+    en: { sub: 'Online · AI assistant', ph: 'Type a message…', send: 'Send', stop: 'Stop', close: 'Close', open: 'Open chat', stopped: ' (stopped)',
+      hello: 'Hi! I am the support assistant. Ask about **shipping**, **returns** or your order.',
+      chips: ['How long is shipping?', 'How do I return a book?'],
+      replies: [
+        'Shipping takes **1–2 business days** in the capital and **3–5 days** elsewhere.\n- Free shipping on large orders\n- You get a tracking code by SMS',
+        'You have **7 days** to return a book:\n- Open a request under My orders\n- Send the book back with the invoice\n- Refunds land within 3 business days',
+        'This is a recorded reply in `mock` mode. In production the reply streams from your endpoint over **SSE**.'
+      ] }
+  };
+
+  const css = `
+  :host{all:initial;position:absolute;inset:0;pointer-events:none;z-index:var(--gc-z,10);
+    --_a:var(--gc-accent,#0f766e);--_bg:var(--gc-bg,#ffffff);--_fg:var(--gc-fg,#17201e);--_r:var(--gc-radius,14px);
+    font-family:var(--gc-font,'Vazirmatn',Tahoma,system-ui,sans-serif);font-size:14px;line-height:1.7;color:var(--_fg)}
+  *{box-sizing:border-box}
+  .wrap{position:absolute;inset:16px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;gap:12px}
+  .launcher{pointer-events:auto;width:56px;height:56px;border-radius:50%;border:0;background:var(--_a);color:#fff;cursor:pointer;
+    display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.22);transition:transform .15s}
+  .launcher:hover{transform:scale(1.05)}
+  .launcher:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--_a);outline-offset:2px}
+  .panel{pointer-events:auto;width:min(350px,100%);flex:0 1 440px;min-height:0;display:flex;flex-direction:column;background:var(--_bg);
+    border-radius:var(--_r);overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.06);
+    transform-origin:bottom right;animation:pop .18s ease-out}
+  :host([dir="rtl"]) .panel{transform-origin:bottom left}
+  .panel[hidden]{display:none}
+  @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.panel{animation:none}.launcher{transition:none}}
+  .header{background:var(--_a);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;flex:none}
+  .htext{flex:1;min-width:0;display:grid;line-height:1.4}
+  .htext b{font-size:15px}
+  .htext span{font-size:12px;opacity:.85}
+  .x{background:rgba(255,255,255,.15);border:0;color:#fff;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:16px;display:grid;place-items:center}
+  .msgs{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:color-mix(in srgb,var(--_a) 5%,var(--_bg))}
+  .msg{max-width:85%;padding:9px 13px;border-radius:var(--_r);white-space:pre-wrap;overflow-wrap:anywhere}
+  .msg.assistant{align-self:flex-end;background:var(--_bg);border:1px solid rgba(0,0,0,.08);border-end-end-radius:4px}
+  .msg.user{align-self:flex-start;background:var(--_a);color:#fff;border-end-start-radius:4px}
+  .msg ul{margin:4px 0 0;padding-inline-start:18px;white-space:normal}
+  .msg code{font-family:ui-monospace,Menlo,monospace;font-size:.88em;background:rgba(0,0,0,.06);padding:0 4px;border-radius:4px}
+  .caret{display:inline-block;width:6px;height:1em;vertical-align:-2px;background:var(--_a);margin-inline-start:2px;animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-end}
+  .chips button{font:inherit;font-size:12.5px;border:1px solid var(--_a);color:var(--_a);background:var(--_bg);border-radius:999px;padding:3px 11px;cursor:pointer}
+  .composer{display:flex;gap:8px;padding:10px;border-top:1px solid rgba(0,0,0,.08);background:var(--_bg)}
+  .composer input{flex:1;min-width:0;font:inherit;color:var(--_fg);background:transparent;border:1px solid rgba(0,0,0,.15);border-radius:calc(var(--_r) * .7);padding:8px 12px}
+  .send{font:inherit;font-weight:700;border:0;border-radius:calc(var(--_r) * .7);padding:0 16px;background:var(--_a);color:#fff;cursor:pointer}
+  .send.stop{background:var(--_fg)}
+  .foot{font-size:10.5px;text-align:center;padding:0 0 6px;background:var(--_bg);opacity:.5;font-family:ui-monospace,Menlo,monospace}
+  `;
+
+  const icon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6c-.5.4-1.3.1-1.3-.6V16A2.5 2.5 0 0 1 4 13.5v-8Z" fill="currentColor"/><circle cx="9" cy="9.5" r="1.2" fill="var(--_a)"/><circle cx="12" cy="9.5" r="1.2" fill="var(--_a)"/><circle cx="15" cy="9.5" r="1.2" fill="var(--_a)"/></svg>';
+  const closeIcon = '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+
+  // Safe mini-markdown: builds nodes, never innerHTML. Supports **bold**, `code`, "- " lists.
+  function renderInline(parent, text) {
+    const re = /(\*\*[^*]+\*\*|`[^`]+`)/g; let last = 0, m;
+    while ((m = re.exec(text))) {
+      if (m.index > last) parent.append(text.slice(last, m.index));
+      const tok = m[0], node = document.createElement(tok.startsWith('**') ? 'strong' : 'code');
+      node.textContent = tok.startsWith('**') ? tok.slice(2, -2) : tok.slice(1, -1);
+      parent.append(node); last = re.lastIndex;
+    }
+    if (last < text.length) parent.append(text.slice(last));
+  }
+  function renderMarkdown(target, src) {
+    target.replaceChildren();
+    let ul = null;
+    src.split('\n').forEach((line, i) => {
+      if (line.startsWith('- ')) { if (!ul) { ul = document.createElement('ul'); target.append(ul); } const li = document.createElement('li'); renderInline(li, line.slice(2)); ul.append(li); }
+      else { ul = null; if (i) target.append('\n'); renderInline(target, line); }
+    });
+  }
+
+  class GoftegoChatPreview extends HTMLElement {
+    static observedAttributes = ['dir', 'title', 'open'];
+    #root; #timer = null; #replyIndex = 0; #built = false;
+    constructor() { super(); this.#root = this.attachShadow({ mode: 'open' }); }
+    get #s() { return STR[this.getAttribute('dir') === 'ltr' ? 'en' : 'fa']; }
+    connectedCallback() { if (!this.#built) this.#build(); }
+    attributeChangedCallback(name) {
+      if (!this.#built) return;
+      if (name === 'dir' || name === 'title') { this.#stop(true); this.#build(); }
+      if (name === 'open') this.#sync();
+    }
+    get open() { return this.hasAttribute('open'); }
+    set open(v) { this.toggleAttribute('open', !!v); }
+    #emit(type, detail) { this.dispatchEvent(new CustomEvent(type, { detail, bubbles: true, composed: true })); }
+    #build() {
+      const s = this.#s, dir = this.getAttribute('dir') || 'rtl', wasOpen = this.open;
+      this.#root.innerHTML = `<style>${css}</style>
+        <div class="wrap" dir="${dir}">
+          <div class="panel" part="panel" role="dialog" aria-modal="false" aria-labelledby="t" hidden>
+            <div class="header" part="header"><div class="avatar">${icon}</div><div class="htext"><b id="t"></b><span></span></div>
+              <button class="x" type="button"></button></div>
+            <div class="msgs" aria-live="polite"></div>
+            <form class="composer"><input part="input" autocomplete="off"><button class="send" type="submit"></button></form>
+            <div class="foot">&lt;goftego-chat&gt; · mock</div>
+          </div>
+          <button class="launcher" part="launcher" type="button">${icon}</button>
+        </div>`;
+      // all user/model text goes through textContent
+      const $ = q => this.#root.querySelector(q);
+      $('#t').textContent = this.getAttribute('title') || (dir === 'ltr' ? 'Support' : 'پشتیبانی');
+      $('.htext span').textContent = s.sub;
+      $('.x').setAttribute('aria-label', s.close); $('.x').innerHTML = closeIcon;
+      $('.launcher').setAttribute('aria-label', s.open);
+      $('input').placeholder = s.ph; $('input').setAttribute('aria-label', s.ph);
+      $('.send').textContent = s.send;
+      this.#msgs = $('.msgs');
+      this.#addMsg('assistant', s.hello);
+      const chips = document.createElement('div'); chips.className = 'chips';
+      s.chips.forEach((c, i) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = c; b.onclick = () => { chips.remove(); this.send(c, i); }; chips.append(b); });
+      this.#msgs.append(chips);
+      $('.launcher').onclick = () => { this.open = !this.open; };
+      $('.x').onclick = () => { this.open = false; };
+      $('form').onsubmit = e => { e.preventDefault(); if (this.#timer) return this.#stop(); const v = $('input').value.trim(); if (v) { $('input').value = ''; this.send(v); } };
+      $('.panel').addEventListener('keydown', e => {
+        if (e.key === 'Escape') { this.open = false; }
+        if (e.key === 'Tab') { // focus trap
+          const f = [...this.#root.querySelectorAll('.panel button, .panel input')].filter(x => x.offsetParent);
+          const first = f[0], last = f[f.length - 1], cur = this.#root.activeElement;
+          if (e.shiftKey && cur === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && cur === last) { e.preventDefault(); first.focus(); }
+        }
+      });
+      this.#built = true;
+      if (wasOpen) this.#sync(true);
+    }
+    #msgs = null;
+    #addMsg(role, text) {
+      const m = document.createElement('div'); m.className = 'msg ' + role; m.setAttribute('part', 'message');
+      renderMarkdown(m, text); this.#msgs.append(m); this.#msgs.scrollTop = this.#msgs.scrollHeight; return m;
+    }
+    #sync(silent) {
+      const panel = this.#root.querySelector('.panel'), launcher = this.#root.querySelector('.launcher');
+      if (!panel) return;
+      const open = this.open;
+      if (panel.hidden === !open) return;
+      panel.hidden = !open;
+      launcher.innerHTML = open ? closeIcon : icon;
+      launcher.setAttribute('aria-expanded', String(open));
+      if (!silent) (open ? this.#root.querySelector('input') : launcher).focus({ preventScroll: true });
+      if (!silent) this.#emit(open ? 'gc-open' : 'gc-close');
+    }
+    send(text, idx) {
+      if (this.#timer) return;
+      this.#root.querySelector('.chips')?.remove();
+      this.#addMsg('user', text);
+      this.#emit('gc-message', { role: 'user', text });
+      const s = this.#s;
+      const full = s.replies[idx ?? (this.#replyIndex++ % s.replies.length)];
+      const m = this.#addMsg('assistant', '');
+      const caret = () => { const c = document.createElement('span'); c.className = 'caret'; m.append(c); };
+      let i = 0; caret();
+      const btn = this.#root.querySelector('.send'); btn.textContent = s.stop; btn.classList.add('stop');
+      this.#current = { m, get text() { return full.slice(0, i); } };
+      this.#timer = setInterval(() => {
+        i = Math.min(full.length, i + 2 + Math.floor(Math.random() * 3));
+        renderMarkdown(m, full.slice(0, i)); caret(); this.#msgs.scrollTop = this.#msgs.scrollHeight;
+        if (i >= full.length) this.#stop();
+      }, 40);
+    }
+    #current = null;
+    #stop(silent) {
+      if (!this.#timer) return;
+      clearInterval(this.#timer); this.#timer = null;
+      const { m, text } = this.#current; const s = this.#s;
+      renderMarkdown(m, text);
+      const full = s.replies.some(r => r === text);
+      if (!full) { const em = document.createElement('em'); em.textContent = s.stopped; em.style.opacity = .6; m.append(em); }
+      const btn = this.#root.querySelector('.send'); if (btn) { btn.textContent = s.send; btn.classList.remove('stop'); }
+      if (!silent) this.#emit('gc-message', { role: 'assistant', text });
+    }
+    close() { this.open = false; }
+  }
+  if (!customElements.get('goftego-chat-preview')) customElements.define('goftego-chat-preview', GoftegoChatPreview);
+
+  const gc = document.getElementById('gc');
+  const log = document.getElementById('log');
+  const logEv = (type, detail) => {
+    log.querySelector('.empty')?.remove();
+    const row = document.createElement('div');
+    const ev = document.createElement('span'); ev.className = 'ev'; ev.textContent = type;
+    row.append(ev, detail ? ' ' + JSON.stringify({ role: detail.role, text: detail.text.length > 34 ? detail.text.slice(0, 34) + '…' : detail.text }) : '');
+    log.append(row); log.scrollTop = log.scrollHeight;
+  };
+  // listening from the host page, outside the shadow root
+  ['gc-open', 'gc-close', 'gc-message', 'gc-error'].forEach(t => document.addEventListener(t, e => logEv(t, e.detail)));
+
+  const accents = ['#0f766e', '#4338ca', '#c2410c', '#be185d', '#1f2937'];
+  const sw = document.getElementById('swatches');
+  accents.forEach((c, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'sw'; b.style.background = c;
+    b.setAttribute('aria-label', '--gc-accent: ' + c); b.setAttribute('aria-pressed', String(i === 0));
+    b.onclick = () => { gc.style.setProperty('--gc-accent', c); sw.querySelectorAll('.sw').forEach(x => x.setAttribute('aria-pressed', String(x === b))); };
+    sw.append(b);
+  });
+  const seg = (id, fn) => { const box = document.getElementById(id); box.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); fn(b.dataset.v); }); };
+  seg('radius', v => gc.style.setProperty('--gc-radius', v));
+  seg('dir', v => { gc.setAttribute('dir', v); gc.setAttribute('title', v === 'ltr' ? 'Support' : 'پشتیبانی'); });
+  document.getElementById('hostile').addEventListener('change', e => document.getElementById('site').classList.toggle('hostile', e.target.checked));
+})();
+</script>

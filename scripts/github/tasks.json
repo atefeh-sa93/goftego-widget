@@ -1,0 +1,540 @@
+{
+  "milestones": [
+    {
+      "key": "M0",
+      "title": "M0 · Setup",
+      "fa": "روز ۰ — آماده‌سازی",
+      "description": "Learning spike, repo scaffold, test tooling, CI and the API contract."
+    },
+    {
+      "key": "M1",
+      "title": "M1 · Element & public API",
+      "fa": "روز ۱ — element، launcher و API عمومی",
+      "description": "Custom element, attributes, methods, typed events, launcher, theming, RTL, safe registration."
+    },
+    {
+      "key": "M2",
+      "title": "M2 · Lazy chat panel",
+      "fa": "روز ۲ — پنل چت lazy",
+      "description": "Lazy-loaded panel, SSE + mock streaming, safe markdown, accessibility."
+    },
+    {
+      "key": "M3",
+      "title": "M3 · Hosts, tests & release",
+      "fa": "روز ۳ — میزبان‌ها، تست، انتشار",
+      "description": "React/Vue/hostile/CSP demos, full test suite, npm 1.0.0, GitHub Pages, README."
+    },
+    {
+      "key": "BL",
+      "title": "Backlog · v1.1+",
+      "fa": "بعد از ۱.۰ — Roadmap",
+      "description": "Post-1.0 roadmap items. Documented in README, not built in 1.0."
+    }
+  ],
+  "labels": [
+    {
+      "name": "setup",
+      "color": "6b7280"
+    },
+    {
+      "name": "feature",
+      "color": "0f766e"
+    },
+    {
+      "name": "a11y",
+      "color": "7c3aed"
+    },
+    {
+      "name": "security",
+      "color": "b91c1c"
+    },
+    {
+      "name": "test",
+      "color": "2563eb"
+    },
+    {
+      "name": "ci",
+      "color": "475569"
+    },
+    {
+      "name": "docs",
+      "color": "ca8a04"
+    },
+    {
+      "name": "release",
+      "color": "16a34a"
+    },
+    {
+      "name": "demo",
+      "color": "db2777"
+    },
+    {
+      "name": "cuttable",
+      "color": "f59e0b"
+    },
+    {
+      "name": "roadmap",
+      "color": "94a3b8"
+    }
+  ],
+  "tasks": [
+    {
+      "n": 1,
+      "m": "M0",
+      "labels": [
+        "setup"
+      ],
+      "title": "Spike: Lit tutorial and a tiny custom element",
+      "fa": "یک ساعت آموزش رسمی Lit؛ یک element کوچک با یک attribute و یک رویداد؛ بررسی shadow root در DevTools",
+      "tasks": [
+        "Finish the official lit.dev tutorial",
+        "Build a throwaway element that takes one attribute and dispatches one event",
+        "Inspect the shadow root in DevTools and confirm page styles do not leak in",
+        "Write 3–5 notes in docs/notes.md (not shipped)"
+      ]
+    },
+    {
+      "n": 2,
+      "m": "M0",
+      "labels": [
+        "setup"
+      ],
+      "title": "Scaffold repo: Vite library mode, Lit 3, TypeScript strict, ESLint",
+      "fa": "ساخت ریپو با pnpm، Vite library mode، Lit 3، TS strict، ESLint و Prettier و ساختار پوشه‌ها",
+      "tasks": [
+        "pnpm init, add lit, vite, typescript",
+        "tsconfig with strict: true",
+        "vite.config.ts in library mode with two entries: index (ESM) and loader",
+        "ESLint + Prettier, scripts: lint, typecheck, build",
+        "Create the folder layout from the plan (src/element, src/panel, src/stream, demos, tests)",
+        "MIT license, .gitignore, .editorconfig"
+      ]
+    },
+    {
+      "n": 3,
+      "m": "M0",
+      "labels": [
+        "setup",
+        "test"
+      ],
+      "title": "Test tooling: Vitest browser mode and Playwright on 3 engines",
+      "fa": "راه‌اندازی Vitest در browser mode و Playwright با Chromium، Firefox و WebKit",
+      "tasks": [
+        "Vitest browser mode with Playwright provider",
+        "playwright.config.ts with chromium, firefox, webkit projects",
+        "One smoke unit test and one smoke e2e test",
+        "Scripts: test, test:e2e"
+      ]
+    },
+    {
+      "n": 4,
+      "m": "M0",
+      "labels": [
+        "ci"
+      ],
+      "title": "CI workflow and size-limit budget",
+      "fa": "فایل ci.yml (lint، typecheck، تست، build، size، e2e) و بودجه حجم: loader زیر ۵KB و کل زیر ۲۵KB",
+      "tasks": [
+        ".github/workflows/ci.yml on push and pull_request (pnpm, Node 22)",
+        "Install Playwright browsers for all three engines",
+        ".size-limit.json: loader < 5 kB gzip, total < 25 kB gzip",
+        "Script: size",
+        "Protect main: require CI to pass before merge"
+      ]
+    },
+    {
+      "n": 5,
+      "m": "M0",
+      "labels": [
+        "docs"
+      ],
+      "title": "Write the public API contract in README first",
+      "fa": "اول جدول API (attributeها، property، متدها، رویدادها، متغیرهای CSS، partها) در README، بعد کد",
+      "tasks": [
+        "Table: endpoint, title, lang, dir, position, open, mock attributes",
+        "headers property (JS only) and why",
+        "Methods open(), close(), send(text)",
+        "Events gc-open, gc-close, gc-message {role,text}, gc-error {message,retryable}",
+        "CSS variables --gc-accent/bg/fg/radius/font/z and parts launcher/panel/header/message/input",
+        "State that this API is protected by semver from 1.0"
+      ]
+    },
+    {
+      "n": 6,
+      "m": "M1",
+      "labels": [
+        "feature"
+      ],
+      "title": "GoftegoChat element: attributes and properties",
+      "fa": "کلاس GoftegoChat با همه attributeها، property مربوط به headers و همگام بودن open در هر دو جهت",
+      "tasks": [
+        "LitElement with reactive properties for endpoint, title, lang, dir, position, open, mock",
+        "open reflects to the attribute both ways",
+        "headers is a property only, never an attribute",
+        "Unit test: attribute ↔ property sync"
+      ]
+    },
+    {
+      "n": 7,
+      "m": "M1",
+      "labels": [
+        "feature"
+      ],
+      "title": "Public methods and typed gc-* events",
+      "fa": "متدهای open/close/send و رویدادهای تایپ‌شده gc-* با bubbles و composed",
+      "tasks": [
+        "src/events.ts with typed detail interfaces and a dispatch helper",
+        "All events use bubbles: true, composed: true",
+        "open(), close(), send(text) methods",
+        "HTMLElementEventMap augmentation so addEventListener is typed",
+        "Unit test: events leave the shadow root with the right detail"
+      ]
+    },
+    {
+      "n": 8,
+      "m": "M1",
+      "labels": [
+        "feature"
+      ],
+      "title": "Launcher button and theming with --gc-* and ::part",
+      "fa": "دکمه launcher، توکن‌های تم روی :host با all: initial، و part برای سفارشی‌سازی",
+      "tasks": [
+        "styles.ts: :host { all: initial } then re-set tokens",
+        "Defaults for --gc-accent, --gc-bg, --gc-fg, --gc-radius, --gc-font, --gc-z (high default)",
+        "Launcher.ts with part=\"launcher\"",
+        "Constructable stylesheets only (no inline style tags)"
+      ]
+    },
+    {
+      "n": 9,
+      "m": "M1",
+      "labels": [
+        "feature"
+      ],
+      "title": "i18n and RTL: lang, dir, built-in fa/en strings, strings property",
+      "fa": "چندزبانگی: متن‌های داخلی فارسی و انگلیسی با lang، جهت خودکار از روی زبان، property به اسم strings برای زبان‌های دیگر، و position منطقی که در RTL جابه‌جا شود",
+      "tasks": [
+        "Built-in UI strings for fa and en (placeholder, send, stop, retry, close, error messages)",
+        "lang picks the strings; an unknown lang falls back to en",
+        "dir defaults from lang (fa, ar, he, ur → rtl) when not set explicitly",
+        "strings property (JS only, partial object) overrides any UI string for other languages",
+        "position uses logical properties: bottom-end sits on the left in RTL",
+        "Unit test: switching lang/dir updates UI text and the launcher side"
+      ]
+    },
+    {
+      "n": 10,
+      "m": "M1",
+      "labels": [
+        "feature"
+      ],
+      "title": "loader.ts and safe custom element registration",
+      "fa": "فایل loader و ثبت امن: اگر اسکریپت دو بار در صفحه بود، دوباره ثبت نشود",
+      "tasks": [
+        "loader.ts registers the element and renders only the launcher",
+        "Guard with customElements.get('goftego-chat') before define",
+        "Unit test: loading the script twice throws nothing",
+        "Several instances on one page work independently"
+      ]
+    },
+    {
+      "n": 11,
+      "m": "M1",
+      "labels": [
+        "demo",
+        "ci"
+      ],
+      "title": "demos/plain page and first green CI",
+      "fa": "صفحه دموی HTML خالی و اولین CI سبز",
+      "tasks": [
+        "demos/plain/index.html using the two-line snippet",
+        "Vite dev server serves demos",
+        "CI is green on main"
+      ]
+    },
+    {
+      "n": 12,
+      "m": "M2",
+      "labels": [
+        "feature"
+      ],
+      "title": "Lazy-load the chat panel on first open",
+      "fa": "بارگذاری پنل با import پویا فقط در اولین باز شدن؛ بررسی در تب Network",
+      "tasks": [
+        "Dynamic import() of src/panel on first open",
+        "Panel is a separate chunk in the build output",
+        "Show a tiny loading state while the chunk loads",
+        "Check in the Network tab and note the chunk size"
+      ]
+    },
+    {
+      "n": 13,
+      "m": "M2",
+      "labels": [
+        "feature"
+      ],
+      "title": "Port sse.ts from Goftego and add mock mode",
+      "fa": "انتقال منطق SSE از Goftego و حالت mock با جواب‌های ضبط‌شده برای دموی بدون سرور",
+      "tasks": [
+        "src/stream/sse.ts: fetch + ReadableStream parser, AbortController",
+        "Send headers property on every request",
+        "src/stream/mock.ts replays recorded responses with realistic timing",
+        "Document the SSE protocol in README (Endpoint protocol section)"
+      ]
+    },
+    {
+      "n": 14,
+      "m": "M2",
+      "labels": [
+        "feature"
+      ],
+      "title": "Chat panel: message list, composer, Stop, Retry, errors",
+      "fa": "ChatPanel، MessageList و Composer؛ stream جواب، دکمه Stop، Retry و حالت‌های خطا",
+      "tasks": [
+        "ChatPanel.ts, MessageList.ts, Composer.ts with parts panel/header/message/input",
+        "Streamed tokens append to the last message",
+        "Stop aborts the stream; Retry resends the last user message",
+        "Network/HTTP errors fire gc-error with retryable",
+        "gc-message fires after each finished message"
+      ]
+    },
+    {
+      "n": 15,
+      "m": "M2",
+      "labels": [
+        "feature",
+        "security"
+      ],
+      "title": "Small, safe markdown renderer with XSS tests first",
+      "fa": "رندرر markdown کوچک (bold، code، لیست، لینک) بدون innerHTML؛ تست‌های XSS اول نوشته شوند",
+      "tasks": [
+        "Write XSS tests first: <script>, onerror, javascript: links",
+        "Build DOM nodes / Lit templates only, never innerHTML",
+        "Support bold, inline code, code blocks, lists, links",
+        "Links get rel=\"noopener noreferrer\" and target=\"_blank\"; only http(s) allowed"
+      ]
+    },
+    {
+      "n": 16,
+      "m": "M2",
+      "labels": [
+        "a11y"
+      ],
+      "title": "Accessibility: dialog, focus trap, Esc, focus return, aria-live",
+      "fa": "دسترس‌پذیری: role=dialog، focus trap، بستن با Esc، برگشت فوکوس به launcher، aria-live برای جواب",
+      "tasks": [
+        "role=\"dialog\" with aria-label from title (labels stay inside the shadow root)",
+        "focus-trap.ts: Tab and Shift+Tab cycle inside the panel",
+        "Esc closes and returns focus to the launcher",
+        "aria-live=\"polite\" region for assistant replies",
+        "Unit test for the focus trap"
+      ]
+    },
+    {
+      "n": 17,
+      "m": "M3",
+      "labels": [
+        "demo",
+        "feature"
+      ],
+      "title": "React 19 demo and JSX types",
+      "fa": "دموی React 19 با Vite و تایپ‌های JSX برای استفاده تایپ‌شده در React",
+      "tasks": [
+        "demos/react with Vite + React 19",
+        "src/types/jsx.d.ts declares <goftego-chat> props and events",
+        "Demo listens to gc-message and shows it on the host page"
+      ]
+    },
+    {
+      "n": 18,
+      "m": "M3",
+      "labels": [
+        "demo",
+        "feature",
+        "cuttable"
+      ],
+      "title": "Vue 3 demo and Vue types",
+      "fa": "دموی Vue 3 و تایپ برای Vue (اگر عقب افتادی، به ۱.۱ منتقل می‌شود)",
+      "tasks": [
+        "demos/vue with Vite + Vue 3 (isCustomElement config)",
+        "src/types/vue.d.ts for GlobalComponents",
+        "Demo listens to gc-message"
+      ]
+    },
+    {
+      "n": 19,
+      "m": "M3",
+      "labels": [
+        "demo"
+      ],
+      "title": "Hostile CSS demo page",
+      "fa": "صفحه hostile با CSS سراسری تهاجمی تا ثابت شود ویجت خراب نمی‌شود",
+      "tasks": [
+        "demos/hostile with * { all: unset !important }, odd fonts, colors, line-height",
+        "Widget looks identical to the plain demo"
+      ]
+    },
+    {
+      "n": 20,
+      "m": "M3",
+      "labels": [
+        "demo",
+        "security",
+        "cuttable"
+      ],
+      "title": "Strict CSP demo page",
+      "fa": "صفحه با CSP سخت‌گیرانه بدون unsafe-inline (اگر عقب افتادی، به ۱.۱ منتقل می‌شود)",
+      "tasks": [
+        "demos/strict-csp with a CSP meta that has no 'unsafe-inline' in style-src",
+        "No CSP errors in the console and the widget works"
+      ]
+    },
+    {
+      "n": 21,
+      "m": "M3",
+      "labels": [
+        "test"
+      ],
+      "title": "Complete unit test suite",
+      "fa": "تکمیل تست‌های واحد: همگامی attribute/property، رویدادها، ثبت دوباره، markdown، focus trap",
+      "tasks": [
+        "attribute ↔ property sync (open both ways)",
+        "gc-* events are composed and carry the right detail",
+        "Re-registering the element throws nothing",
+        "Markdown output and XSS cases",
+        "Focus trap cycles with Tab and Shift+Tab"
+      ]
+    },
+    {
+      "n": 22,
+      "m": "M3",
+      "labels": [
+        "test"
+      ],
+      "title": "Playwright E2E across all demos on 3 engines",
+      "fa": "تست E2E روی همه دموها و هر سه موتور: stream، lazy، hostile، تم، CSP، RTL، axe",
+      "tasks": [
+        "plain/react/vue: open, send, see streamed reply, Stop, host receives gc-message",
+        "Lazy: panel chunk absent before click, present after",
+        "Hostile: toHaveScreenshot matches the plain page",
+        "Theme: changing --gc-accent recolors the launcher",
+        "Strict CSP: no console errors",
+        "RTL: launcher bottom-left, text right-aligned",
+        "@axe-core/playwright on the open panel"
+      ]
+    },
+    {
+      "n": 23,
+      "m": "M3",
+      "labels": [
+        "release"
+      ],
+      "title": "Release 1.0.0 to npm with Changesets",
+      "fa": "انتشار نسخه 1.0.0 روی npm با Changesets؛ CDN از طریق jsDelivr خودکار",
+      "tasks": [
+        "Set up Changesets and a release workflow",
+        "package.json exports, types, files, sideEffects",
+        "Publish goftego-widget@1.0.0",
+        "Verify cdn.jsdelivr.net/npm/goftego-widget@1/dist/loader.js loads"
+      ]
+    },
+    {
+      "n": 24,
+      "m": "M3",
+      "labels": [
+        "ci",
+        "demo"
+      ],
+      "title": "Deploy demos to GitHub Pages",
+      "fa": "workflow جدا برای انتشار دموها روی GitHub Pages",
+      "tasks": [
+        ".github/workflows/deploy-demos.yml",
+        "All demo pages reachable from an index page",
+        "Link the live demos from README"
+      ]
+    },
+    {
+      "n": 25,
+      "m": "M3",
+      "labels": [
+        "docs"
+      ],
+      "title": "Final README",
+      "fa": "README کامل: badgeها، GIF، Quick start، API reference، پروتکل، تصمیم‌های فنی، محدودیت‌ها، نسخه‌گذاری",
+      "tasks": [
+        "One-line summary + npm, gzip size, CI, license badges",
+        "GIF under 15 s: same widget in React, Vue and plain HTML; streaming; recolor with one CSS variable",
+        "Quick start, npm install, React and Vue usage with types",
+        "API reference and Endpoint protocol",
+        "Architecture diagram",
+        "Technical decisions (5) + security",
+        "Bundle size, browser support, known limitations",
+        "How I used AI, versioning policy (@1.0.0 vs @1 trade-off), Roadmap"
+      ]
+    },
+    {
+      "n": 26,
+      "m": "M3",
+      "labels": [
+        "docs"
+      ],
+      "title": "Repo settings: description, topics, social preview, pin",
+      "fa": "تنظیمات ریپو: توضیح یک‌خطی، topicها، تصویر social preview و pin در پروفایل",
+      "tasks": [
+        "Description: Framework-agnostic embeddable AI chat widget built with Lit web components and Shadow DOM",
+        "Topics: web-components, lit, shadow-dom, custom-elements, widget, micro-frontends, typescript, sse",
+        "Social preview image of the open widget",
+        "Pin on profile"
+      ]
+    },
+    {
+      "n": 27,
+      "m": "BL",
+      "labels": [
+        "roadmap"
+      ],
+      "title": "Embed the widget on the portfolio site",
+      "fa": "قرار دادن ویجت در سایت پورتفولیو تا بازدیدکننده‌ها درباره پروژه‌ها سؤال بپرسند",
+      "tasks": [
+        "Add the two-line snippet to the portfolio",
+        "Point it at a real /api/chat endpoint"
+      ]
+    },
+    {
+      "n": 28,
+      "m": "BL",
+      "labels": [
+        "roadmap"
+      ],
+      "title": "v1.1: inline mode (in-page, not floating)",
+      "fa": "نسخه ۱.۱: حالت inline داخل صفحه",
+      "tasks": [
+        "Design the attribute (e.g. mode=\"inline\") as a minor, non-breaking addition"
+      ]
+    },
+    {
+      "n": 29,
+      "m": "BL",
+      "labels": [
+        "roadmap"
+      ],
+      "title": "v1.1: persist conversation in sessionStorage",
+      "fa": "نسخه ۱.۱: ذخیره گفتگو در sessionStorage",
+      "tasks": [
+        "Opt-in attribute, keyed per endpoint"
+      ]
+    },
+    {
+      "n": 30,
+      "m": "BL",
+      "labels": [
+        "roadmap"
+      ],
+      "title": "v1.2: Declarative Shadow DOM for SSR",
+      "fa": "نسخه ۱.۲: Declarative Shadow DOM برای SSR",
+      "tasks": [
+        "Render the launcher without JavaScript"
+      ]
+    }
+  ]
+}

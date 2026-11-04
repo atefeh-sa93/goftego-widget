@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>goftego-widget Design Options</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a two-up gallery of host-page frames, one per widget direction, each with its closed state and scope note */
+:root{
+  --bg:#f4f7f6; --surface:#ffffff; --fg:#13201d; --muted:#5a6b66; --line:#d8e2df; --accent:#0f766e; --code:#eaf1ef;
+  --f-body:'Vazirmatn', Tahoma, system-ui, sans-serif;
+  --f-mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0d1413;--surface:#141e1c;--fg:#e3ebe9;--muted:#93a6a1;--line:#24332f;--accent:#2bc4b0;--code:#192623;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1413;--surface:#141e1c;--fg:#e3ebe9;--muted:#93a6a1;--line:#24332f;--accent:#2bc4b0;--code:#192623;color-scheme:dark}
+*{box-sizing:border-box}
+body{direction:rtl;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.8;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:40px 80px}
+.wrap{max-width:1120px;margin-inline:auto;display:grid;gap:36px}
+h1,h2,h3{margin:0;text-wrap:balance;line-height:1.35}
+h1{font-weight:900;font-size:clamp(28px,4.5vw,40px)}
+p{margin:0}
+code{font-family:var(--f-mono);font-size:.85em;background:var(--code);padding:1px 6px;border-radius:5px;direction:ltr;unicode-bidi:isolate}
+.muted{color:var(--muted)}
+header{display:grid;gap:12px;max-width:70ch}
+.tag{font-family:var(--f-mono);color:var(--accent);direction:ltr;text-align:right}
+.bar{display:flex;flex-wrap:wrap;gap:20px;align-items:center;padding-block:14px;border-block:1px solid var(--line)}
+.bar > span{font-size:13px;font-weight:700}
+.sw{width:28px;height:28px;border-radius:50%;border:2px solid var(--surface);outline:1px solid var(--line);cursor:pointer}
+.sw[aria-pressed="true"]{outline:2px solid var(--fg)}
+.sws{display:flex;gap:8px}
+.sw:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.card{display:grid;gap:12px;align-content:start;min-width:0}
+.card-head{display:flex;align-items:baseline;gap:12px}
+.letter{font-family:var(--f-mono);font-weight:600;font-size:13px;color:#fff;background:var(--accent);border-radius:6px;padding:1px 8px}
+.card-head h2{font-size:20px;font-weight:900}
+.scope{margin-inline-start:auto;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:1px 10px;color:var(--muted);white-space:nowrap}
+.scope.extra{border-color:#d97706;color:#b45309}
+.meta{display:grid;gap:4px;font-size:14px}
+.meta b{font-weight:700}
+.closed{display:flex;align-items:center;gap:14px;font-size:12.5px;color:var(--muted);min-height:64px}
+
+/* host page frame (a fixed-palette fake site) */
+.frame{position:relative;height:520px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fbfaf7;color:#1f2522}
+.frame .site{padding:22px 24px;display:grid;gap:12px;max-width:300px}
+.frame .site b{font-size:17px}
+.frame .ph{height:11px;border-radius:4px;background:#e8e4db}
+.mini{position:relative;height:64px;width:180px;border:1px dashed var(--line);border-radius:10px;background:#fbfaf7}
+
+/* shared widget bits; --acc is the widget accent */
+.w{--acc:#0f766e;font-family:var(--f-body);font-size:13.5px;line-height:1.7}
+.w *{box-sizing:border-box}
+.panel{position:absolute;inset-block-end:16px;inset-inline-end:16px;width:min(310px,calc(100% - 32px));display:flex;flex-direction:column;overflow:hidden}
+.msgs{flex:1;display:flex;flex-direction:column;gap:9px;padding:14px;overflow:hidden}
+.msg{max-width:86%;padding:8px 12px}
+.msg ul{margin:2px 0 0;padding-inline-start:16px}
+.icon{width:22px;height:22px;display:block}
+.btn-reset{border:0;background:none;font:inherit;color:inherit;padding:0;cursor:default}
+
+/* A · classic */
+.va .panel{height:420px;background:#fff;border-radius:16px;box-shadow:0 18px 48px rgba(0,0,0,.22)}
+.va .hd{background:var(--acc);color:#fff;display:flex;align-items:center;gap:10px;padding:12px 14px}
+.va .av{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center}
+.va .hd div{flex:1;display:grid;line-height:1.35}.va .hd small{opacity:.85;font-size:11.5px}
+.va .x{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.16);display:grid;place-items:center}
+.va .msgs{background:color-mix(in srgb,var(--acc) 6%,#fff)}
+.va .bot{align-self:flex-end;background:#fff;border:1px solid #e6ebe9;border-radius:14px 14px 14px 4px}
+.va .me{align-self:flex-start;background:var(--acc);color:#fff;border-radius:14px 14px 4px 14px}
+.va .cmp{display:flex;gap:8px;padding:10px;border-top:1px solid #eef1f0}
+.va .in{flex:1;border:1px solid #d9dfdd;border-radius:10px;padding:7px 11px;color:#8a938f}
+.va .send{background:var(--acc);color:#fff;border-radius:10px;padding:7px 14px;font-weight:700}
+.va .launch{width:56px;height:56px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+
+/* B · minimal */
+.vb .panel{height:420px;background:#fff;border:1px solid #dcdcd6;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.08);color:#1c1c1a}
+.vb .hd{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid #ecece7}
+.vb .hd b{flex:1}.vb .dot{width:7px;height:7px;border-radius:50%;background:#16a34a}
+.vb .hd small{color:#77776f;font-size:11.5px}
+.vb .x{color:#8b8b84}
+.vb .who{font-size:11px;font-weight:700;color:var(--acc);margin-bottom:-6px}
+.vb .bot{padding:0;max-width:100%}
+.vb .me{align-self:flex-start;background:#f1f1ed;border-radius:8px}
+.vb .cmp{display:flex;align-items:center;gap:8px;margin:10px 14px 14px;border-bottom:1.5px solid #1c1c1a;padding-bottom:6px}
+.vb .in{flex:1;color:#9a9a92}
+.vb .send{color:var(--acc)}
+.vb .launch{display:flex;align-items:center;gap:8px;background:#fff;color:#1c1c1a;border:1.5px solid #1c1c1a;border-radius:999px;padding:8px 16px 8px 14px;font-weight:700;box-shadow:3px 3px 0 var(--acc)}
+
+/* C · welcome card */
+.vc .panel{height:440px;background:#fff;border-radius:26px;box-shadow:0 24px 60px rgba(0,0,0,.2);padding:18px;gap:14px}
+.vc .top{display:flex;justify-content:space-between;align-items:center}
+.vc .av{width:46px;height:46px;border-radius:16px;background:color-mix(in srgb,var(--acc) 14%,#fff);color:var(--acc);display:grid;place-items:center}
+.vc .x{width:30px;height:30px;border-radius:50%;background:#f2f4f3;display:grid;place-items:center;color:#5b625f}
+.vc h4{margin:0;font-size:22px;font-weight:900;line-height:1.35}
+.vc .sub{color:#6b736f;font-size:13px;margin-top:-8px}
+.vc .sugg{display:grid;gap:8px}
+.vc .s{display:flex;align-items:center;justify-content:space-between;border:1px solid #e7ebe9;border-radius:14px;padding:10px 14px;font-weight:500}
+.vc .s span{color:var(--acc);font-weight:900}
+.vc .cmp{margin-top:auto;display:flex;align-items:center;gap:8px;background:#f2f4f3;border-radius:999px;padding:6px;padding-inline-start:14px}
+.vc .in{flex:1;color:#8a928e;padding-inline-start:6px}
+.vc .send{width:34px;height:34px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center}
+.vc .launch{position:relative;width:60px;height:60px;border-radius:20px;background:var(--acc);color:#fff;display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.vc .badge{position:absolute;top:-5px;inset-inline-end:-5px;width:20px;height:20px;border-radius:50%;background:#e11d48;color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;border:2px solid #fbfaf7}
+
+/* D · side sheet */
+.vd .panel{inset-block:0;inset-inline-end:0;width:min(300px,85%);background:#fff;box-shadow:0 0 0 1px #e3e6e4,12px 0 40px rgba(0,0,0,.14)}
+.vd .hd{padding:16px;display:grid;gap:10px;border-bottom:1px solid #edf0ee}
+.vd .row{display:flex;align-items:center;justify-content:space-between}
+.vd .tabs{display:flex;gap:16px;font-size:13px;color:#6b736f}
+.vd .tabs b{color:#1f2522;border-bottom:2px solid var(--acc);padding-bottom:4px}
+.vd .bot{align-self:flex-end;background:#f4f6f5;border-radius:10px}
+.vd .me{align-self:flex-start;border:1px solid var(--acc);color:var(--acc);border-radius:10px;background:#fff}
+.vd .cmp{margin:12px;border:1px solid #d9dfdd;border-radius:10px;padding:10px 12px;display:grid;gap:10px}
+.vd .in{color:#8a938f;min-height:34px}
+.vd .cmp div{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#9aa29e}
+.vd .send{background:var(--acc);color:#fff;border-radius:8px;padding:4px 14px;font-weight:700;font-size:12.5px}
+.vd .launch{position:absolute;inset-inline-end:0;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;background:var(--acc);color:#fff;padding:14px 7px;border-radius:0 10px 10px 0;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
+
+/* E · dark compact (same component, only --gc-bg/--gc-fg changed) */
+.ve .panel{height:400px;width:min(290px,calc(100% - 32px));background:#121a18;color:#dfe8e5;border-radius:12px;border:1px solid #24312d;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.ve .hd{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid #24312d;font-size:13px}
+.ve .hd b{flex:1}.ve .dot{width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 30%,transparent)}
+.ve kbd{font-family:var(--f-mono);font-size:10.5px;border:1px solid #33433e;border-radius:4px;padding:0 5px;color:#93a6a1}
+.ve .bot{align-self:flex-end;border-inline-end:2px solid var(--acc);padding:2px 10px;max-width:92%}
+.ve .bot code{font-family:var(--f-mono);font-size:.85em;background:#1e2a27;padding:0 5px;border-radius:4px;color:color-mix(in srgb,var(--acc) 70%,#fff)}
+.ve .me{align-self:flex-start;background:#1e2a27;border-radius:8px}
+.ve .cmp{display:flex;align-items:center;gap:8px;margin:10px;background:#1a2421;border:1px solid #2b3a35;border-radius:8px;padding:7px 10px}
+.ve .in{flex:1;color:#6f817c}
+.ve .launch{width:46px;height:46px;border-radius:50%;background:#121a18;color:var(--acc);display:grid;place-items:center;box-shadow:0 0 0 2px var(--acc),0 6px 18px rgba(0,0,0,.3)}
+
+.frame .launch-pos,.mini .launch-pos{position:absolute;inset-block-end:12px;inset-inline-end:12px}
+.mini .vd-pos{position:absolute;inset-inline-end:0;inset-block:0}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="tag">&lt;goftego-chat&gt; · design options</div>
+  <h1>پنج جهت دیزاین برای ویجت</h1>
+  <p class="muted">هر قاب یک سایت میزبان فرضی است با پنل باز، و زیرش حالت بسته (فقط launcher) آمده. برچسب گوشه هر گزینه می‌گوید با API فعلی ساخته می‌شود یا کار اضافه به scope نسخه 1.0 اضافه می‌کند. رنگ اصلی را عوض کنید تا ببینید هر دیزاین با <code>--gc-accent</code> چطور می‌شود.</p>
+</header>
+<div class="bar"><span>رنگ اصلی · <code>--gc-accent</code></span><div class="sws" id="sws"></div></div>
+
+<div class="grid" id="grid">
+
+<article class="card">
+  <div class="card-head"><span class="letter">A</span><h2>کلاسیک</h2><span class="scope">فقط تم · بدون کار اضافه</span></div>
+  <div class="frame"><div class="site"><b>کتاب‌سرای نمونه</b><div class="ph"></div><div class="ph" style="width:80%"></div><div class="ph" style="width:60%"></div></div>
+    <div class="w va" dir="rtl"><div class="panel">
+      <div class="hd"><span class="av"><svg class="icon"><use href="#i-chat"/></svg></span><div><b>پشتیبانی</b><small>آنلاین · پاسخ با هوش مصنوعی</small></div><span class="x"><svg class="icon" style="width:16px"><use href="#i-x"/></svg></span></div>
+      <div class="msgs"><div class="msg bot">سلام! درباره <b>ارسال</b> یا <b>مرجوعی</b> بپرسید.</div><div class="msg me">زمان ارسال چقدره؟</div><div class="msg bot">در تهران <b>۱ تا ۲ روز کاری</b>:<ul><li>ارسال رایگان برای خرید بالا</li><li>کد رهگیری با پیامک</li></ul></div></div>
+      <div class="cmp"><span class="in">پیامتان را بنویسید…</span><span class="send">ارسال</span></div>
+    </div></div></div>
+  <div class="closed">حالت بسته: <div class="mini"><div class="w va launch-pos" dir="rtl"><span class="launch"><svg class="icon"><use href="#i-chat"/></svg></span></div></div></div>
+  <div class="meta"><p><b>حس:</b> آشنا و امن، شبیه Intercom و Crisp.</p><p><b>مناسب برای:</b> فروشگاه و سایت خدماتی. همان دیزاین پیش‌فرض صفحه رودمپ.</p></div>
+</article>
+
+<article class="card">
+  <div class="card-head"><span class="letter">B</span><h2>مینیمال</h2><span class="scope">فقط تم و part</span></div>
+  <div class="frame"><div class="site"><b>کتاب‌سرای نمونه</b><div class="ph"></div><div class="ph" style="width:80%"></div><div class="ph" style="width:60%"></div></div>
+    <div class="w vb" dir="rtl"><div class="panel">
+      <div class="hd"><span class="dot"></span><b>پشتیبانی</b><small>معمولاً فوری</small><span class="x"><svg class="icon" style="width:16px"><use href="#i-x"/></svg></span></div>
+      <div class="msgs"><span class="who">دستیار</span><div class="msg bot">سلام! درباره ارسال یا مرجوعی بپرسید.</div><div class="msg me">زمان ارسال چقدره؟</div><span class="who">دستیار</span><div class="msg bot">در تهران <b>۱ تا ۲ روز کاری</b> و در شهرستان‌ها <b>۳ تا ۵ روز</b>. کد رهگیری پیامک می‌شود.</div></div>
+      <div class="cmp"><span class="in">بنویسید…</span><span class="send"><svg class="icon"><use href="#i-send"/></svg></span></div>
+    </div></div></div>
+  <div class="closed">حالت بسته: <div class="mini"><div class="w vb launch-pos" dir="rtl"><span class="launch"><svg class="icon" style="width:18px"><use href="#i-chat"/></svg>سؤالی دارید؟</span></div></div></div>
+  <div class="meta"><p><b>حس:</b> تایپوگرافیک و آرام، پیام دستیار بدون حباب مثل متن یک مقاله.</p><p><b>مناسب برای:</b> سایت‌های محتوایی، بلاگ و پورتفولیو. دکمه متن‌دار نرخ کلیک بیشتری دارد ولی جای بیشتری می‌گیرد.</p></div>
+</article>
+
+<article class="card">
+  <div class="card-head"><span class="letter">C</span><h2>کارت خوش‌آمد</h2><span class="scope extra">+ صفحه خوش‌آمد و پیشنهادها</span></div>
+  <div class="frame"><div class="site"><b>کتاب‌سرای نمونه</b><div class="ph"></div><div class="ph" style="width:80%"></div><div class="ph" style="width:60%"></div></div>
+    <div class="w vc" dir="rtl"><div class="panel">
+      <div class="top"><span class="av"><svg class="icon"><use href="#i-chat"/></svg></span><span class="x"><svg class="icon" style="width:15px"><use href="#i-x"/></svg></span></div>
+      <h4>سلام، چطور می‌توانیم کمکتان کنیم؟</h4>
+      <p class="sub">دستیار پشتیبانی کتاب‌سرا، شبانه‌روزی</p>
+      <div class="sugg"><div class="s">زمان ارسال سفارش<span>‹</span></div><div class="s">پیگیری سفارش<span>‹</span></div><div class="s">شرایط مرجوعی<span>‹</span></div></div>
+      <div class="cmp"><span class="in">سؤال خودتان را بپرسید…</span><span class="send"><svg class="icon" style="width:17px"><use href="#i-send"/></svg></span></div>
+    </div></div></div>
+  <div class="closed">حالت بسته: <div class="mini"><div class="w vc launch-pos" dir="rtl"><span class="launch"><svg class="icon"><use href="#i-chat"/></svg><span class="badge">۱</span></span></div></div></div>
+  <div class="meta"><p><b>حس:</b> صمیمی و مدرن، شبیه اپ‌های پیام‌رسان جدید.</p><p><b>هزینه:</b> یک attribute یا property جدید برای پیشنهادها (مثلاً <code>suggestions</code>) و یک صفحه شروع. حدود نصف روز کار و کمی حجم.</p></div>
+</article>
+
+<article class="card">
+  <div class="card-head"><span class="letter">D</span><h2>پنل کناری</h2><span class="scope extra">+ حالت layout جدید</span></div>
+  <div class="frame"><div class="site"><b>کتاب‌سرای نمونه</b><div class="ph"></div><div class="ph" style="width:80%"></div><div class="ph" style="width:60%"></div></div>
+    <div class="w vd" dir="rtl"><div class="panel">
+      <div class="hd"><div class="row"><b>پشتیبانی</b><span><svg class="icon" style="width:16px"><use href="#i-x"/></svg></span></div><div class="tabs"><b>گفتگو</b><span>سؤالات متداول</span></div></div>
+      <div class="msgs"><div class="msg bot">سلام! درباره ارسال یا مرجوعی بپرسید.</div><div class="msg me">زمان ارسال چقدره؟</div><div class="msg bot">در تهران <b>۱ تا ۲ روز کاری</b>:<ul><li>ارسال رایگان برای خرید بالا</li><li>کد رهگیری با پیامک</li></ul></div></div>
+      <div class="cmp"><span class="in">پیامتان را بنویسید…</span><div><span>Enter برای ارسال</span><span class="send">ارسال</span></div></div>
+    </div></div></div>
+  <div class="closed">حالت بسته: <div class="mini"><div class="w vd vd-pos" dir="rtl"><span class="launch"><svg class="icon" style="width:16px;transform:rotate(90deg)"><use href="#i-chat"/></svg>پشتیبانی</span></div></div></div>
+  <div class="meta"><p><b>حس:</b> ابزار کاری، جواب‌های طولانی جا دارند و صفحه زیرش دیده می‌شود.</p><p><b>هزینه:</b> attribute جدید مثل <code>layout="sheet"</code> و تست‌های بیشتر. پیشنهاد: در 1.1 کنار حالت inline.</p></div>
+</article>
+
+<article class="card">
+  <div class="card-head"><span class="letter">E</span><h2>تیره و فشرده</h2><span class="scope">فقط تم · همان A با رنگ دیگر</span></div>
+  <div class="frame"><div class="site"><b>docs.example</b><div class="ph"></div><div class="ph" style="width:80%"></div><div class="ph" style="width:60%"></div></div>
+    <div class="w ve" dir="rtl"><div class="panel">
+      <div class="hd"><span class="dot"></span><b>دستیار مستندات</b><kbd>Esc</kbd></div>
+      <div class="msgs"><div class="msg bot">سلام! درباره نصب و API بپرسید.</div><div class="msg me">چطور تم را عوض کنم؟</div><div class="msg bot">متغیر <code>--gc-accent</code> را روی خود تگ ست کنید. برای جزئیات بیشتر از <code>::part(panel)</code> استفاده کنید.</div></div>
+      <div class="cmp"><span class="in">بپرسید…</span><kbd>⏎</kbd></div>
+    </div></div></div>
+  <div class="closed">حالت بسته: <div class="mini"><div class="w ve launch-pos" dir="rtl"><span class="launch"><svg class="icon" style="width:20px"><use href="#i-chat"/></svg></span></div></div></div>
+  <div class="meta"><p><b>حس:</b> فنی و جمع‌وجور، برای سایت مستندات و ابزارهای توسعه‌دهنده.</p><p><b>نکته:</b> نشان می‌دهد سیستم تم واقعاً کار می‌کند. می‌تواند به‌عنوان preset دوم در دمو باشد.</p></div>
+</article>
+
+</div>
+
+<p class="muted" style="max-width:70ch">پیشنهاد من: <b>A</b> به‌عنوان پیش‌فرض و <b>E</b> به‌عنوان دموی تم در صفحه دموها، چون هر دو بدون کار اضافه با API نسخه 1.0 ساخته می‌شوند. اگر C یا D را دوست دارید، می‌شود آن‌ها را به‌عنوان فیچر 1.1 در بک‌لاگ گذاشت.</p>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6c-.5.4-1.3.1-1.3-.6V16A2.5 2.5 0 0 1 4 13.5v-8Z" fill="currentColor"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M20 12 4 4l3 8-3 8 16-8Z" fill="currentColor" transform="rotate(180 12 12)"/></symbol>
+</svg>
+
+<script>
+(() => {
+  const accents = ['#0f766e', '#4338ca', '#c2410c', '#be185d', '#1f2937'];
+  const box = document.getElementById('sws');
+  accents.forEach((c, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sw'; b.style.background = c;
+    b.setAttribute('aria-label', '--gc-accent: ' + c); b.setAttribute('aria-pressed', String(i === 0));
+    b.onclick = () => {
+      document.querySelectorAll('.w').forEach(w => w.style.setProperty('--acc', c));
+      box.querySelectorAll('.sw').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    };
+    box.append(b);
+  });
+})();
+</script>
