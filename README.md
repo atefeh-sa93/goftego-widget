@@ -24,14 +24,15 @@ Every decision in this project is made explicitly and recorded as an
 [Architecture Decision Record](docs/decisions/). Each pull request lists the
 decisions it implements.
 
-| #                                                       | Decision                   | Choice                                              | Status   |
-| ------------------------------------------------------- | -------------------------- | --------------------------------------------------- | -------- |
-| [0001](docs/decisions/0001-record-decisions-as-adrs.md) | How decisions are recorded | ADR + PR section + this table                       | Accepted |
-| [0002](docs/decisions/0002-design-direction-classic.md) | Visual design direction    | A · Classic panel                                   | Accepted |
-| [0003](docs/decisions/0003-eslint-and-prettier.md)      | Lint and format tooling    | ESLint + Prettier, with Lit and web-component rules | Accepted |
-| [0004](docs/decisions/0004-standard-decorators.md)      | Decorator style in Lit     | Standard TC39 decorators with `accessor`            | Accepted |
-| [0005](docs/decisions/0005-browser-target-es2021.md)    | Build target               | ES2021, same as Lit 3                               | Accepted |
-| [0006](docs/decisions/0006-mit-license.md)              | License                    | MIT                                                 | Accepted |
+| #                                                       | Decision                   | Choice                                                                           | Status   |
+| ------------------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------- | -------- |
+| [0001](docs/decisions/0001-record-decisions-as-adrs.md) | How decisions are recorded | ADR + PR section + this table                                                    | Accepted |
+| [0002](docs/decisions/0002-design-direction-classic.md) | Visual design direction    | A · Classic panel                                                                | Accepted |
+| [0003](docs/decisions/0003-eslint-and-prettier.md)      | Lint and format tooling    | ESLint + Prettier, with Lit and web-component rules                              | Accepted |
+| [0004](docs/decisions/0004-standard-decorators.md)      | Decorator style in Lit     | Standard TC39 decorators with `accessor`                                         | Accepted |
+| [0005](docs/decisions/0005-browser-target-es2021.md)    | Build target               | ES2021, same as Lit 3                                                            | Accepted |
+| [0006](docs/decisions/0006-mit-license.md)              | License                    | MIT                                                                              | Accepted |
+| [0007](docs/decisions/0007-protect-main-branch.md)      | Branch protection          | Ruleset on `main`: PR required, no force-push or deletion; CI checks added in #4 | Accepted |
 
 ## Browser support
 
